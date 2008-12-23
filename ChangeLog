@@ -1,0 +1,52 @@
+# CVS Revision $Revision: 1.11 $
+# Last modified on $Date: 2008/12/22 16:46:42 $ by $Author: ewl $
+
+version 0.7.0  (22/12/2008)
+
+CHANGE: added myself Eric L. to the developers.
+CHANGE: the default behavior is now to keep edits made on time spans (only ESC cancels changes done).
+FIX: more strings are now translatable but there is much more to be done.
+FIX: timezone set manually is now properly saved.
+NEW: hourglass now exits gracefully in case of shutdown, though it doesn't
+seem to work properly under Vista (due to a Java or Vista bug).
+NEW: it is now possible to enter an integer for a full hour time (e.g. 9 for 9:00).
+DEVELCHANGE: added shutdownhook to SummaryFrame class.
+DEVELCHANGE: Add javac source and target to local.properties sample for explicit Java versioning (one version below the current one).
+DEVELCHANGE: refactorized doClose partially into doShutdown.
+DEVELCHANGE: replace Jug/Doomdark UUID functions through java.util.UUID (because Jug is not maintained anymore).
+DEVELNEW: swingui.Utilities.getMnemonicAsInt public function
+
+version 0.6.1  (05/01/2005):
+	* Fixed Java 1.4 compatability.
+	* Fixed reporitory locking error on startup.
+	* Allow alternative home directory (see INSTALL file)
+
+version 0.6.0  (03/05/2005):	
+	* Ported to Java 5.0
+	* Fixed bug that caused data loss when Chinese characters are used.
+	* Multiple instances of the app are now disallowed.
+	* Added row and column sums in the timecard.
+	* Ability to edit historical time entries.
+	* User can choose 12 vs 24 hour time format.
+
+version 0.5.0  (11/08/2003):
+	* Added a timecard report.
+	* Added autosave options and "File/Save Now" menu item.
+	* Added "right-click to create child project" feature.
+	* Mouse over on a project shows total time and today's time.
+	* Fixed bug in saving when tmp and home are on different filesystems.
+
+version 0.4.0  (04/22/2003):
+	* Added support for hierarchical projects.
+	* Added ability to override default time zone.
+	* Added tool tip support for projects.
+	* Fixed word-wrap bug in project editor.
+	
+version 0.3.1  (03/08/2003):
+	* First iteration Swing UI complete
+	* First public release on SourceForge.net
+	
+version 0.2  (01/26/2003):
+	* First iteration framework complete.
+	* Moved local environment configuration files to conf.
+	* Created ChangeLog file.

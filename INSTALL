@@ -1,0 +1,48 @@
+# CVS Revision $Revision: 1.6 $
+# Last modified on $Date: 2005/05/02 00:04:03 $ by $Author: mgrant79 $
+
+======================================================================
+ Hourglass Installation 
+======================================================================
+
+If you've downloaded a source distribution, see the README for
+information about how to build Hourglass from source.  This document
+assumes you have either built or downloaded a binary distribution of
+Hourglass.  
+
+Make sure Hourglass is not running when you update its JAR file!
+
+In the instructions below, DISTDIR is the directory which contains the
+Hourglass distribution directory.  If you've downloaded a binary
+distribution, DISTDIR is the directory into which you unpacked
+distribution.
+
+To install:
+----------------------------------------------------------------------
+# cp -R DISTDIR/hourglass /path/of/your/choice
+
+
+To run:
+----------------------------------------------------------------------
+# java -jar /path/of/your/choice/hourglass/lib/hourglass.jar
+
+You may want to create shell script or batch file to run Hourglass.
+
+Data Storage:
+----------------------------------------------------------------------
+Project data is stored at $HOME/.hourglass/data.xml by default.
+However, there are two ways to change this:
+
+1.  -Dhg.home=<hg_home>  -  This will change the directory
+2.  -Dhg.archive.name=<archive_name>  -  Uses <archive_name>.xml
+      instead of data.xml
+
+
+
+======================================================================
+ Where to Get More Information
+======================================================================
+
+Currently, this is it :)  Email mike@acm.jhu.edu if you need help
+after reading the information above.
+

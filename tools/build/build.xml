@@ -1,0 +1,36 @@
+<project name="hourglass-build-tools" default="compile">
+
+  <property name="dir.src" value="${basedir}/src" />
+  <property name="dir.build" value="${basedir}/build" />
+  <property name="dir.build.classes" value="${dir.build}/classes" />
+  <property name="dir.export" value="${basedir}/export" />
+  <property name="dir.resources" value="${basedir}/resources" />
+
+  <path id="classpath.compile">
+    <pathelement location="${jar.ant}" />
+  </path>
+
+  <target name="init">
+    <mkdir dir="${dir.build.classes}" />   
+    <mkdir dir="${dir.export}" />
+  </target>
+  
+  <target name="compile" depends="init">
+    <javac srcdir="${dir.src}"
+           destdir="${dir.build.classes}"
+           classpathref="classpath.compile" />
+  </target>
+  
+  <target name="export" depends="compile">
+  	<jar destfile="${dir.export}/hourglass-build-tools.jar">
+  	  <fileset dir="${dir.build.classes}" />
+  	  <fileset dir="${dir.resources}" />
+  	</jar>
+  </target>
+  
+  <target name="clean">
+    <delete dir="${dir.build}" />
+    <delete dir="${dir.export}" />
+  </target>
+
+</project>

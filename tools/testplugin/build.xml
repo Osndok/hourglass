@@ -1,0 +1,44 @@
+<project name="hourglass-test-plugin" default="export">
+
+  <property name="dir.src" value="${basedir}/src" />
+  <property name="dir.build" value="${basedir}/build" />
+  <property name="dir.build.classes" value="${dir.build}/classes" />
+  <property name="dir.export" value="${basedir}/export" />
+  <property name="dir.resources" value="${basedir}/resources" />
+
+  <path id="classpath.compile">
+    <pathelement location="${jar.ant}" />
+    <pathelement location="../../build/classes" />
+  </path>
+
+  <target name="init">
+    <mkdir dir="${dir.build.classes}" />   
+    <mkdir dir="${dir.export}" />
+  </target>
+  
+  <target name="compile" depends="init">
+    <javac srcdir="${dir.src}"
+           destdir="${dir.build.classes}"
+           classpathref="classpath.compile" />
+  </target>
+
+  <target name="res-jar" depends="init">
+    <jar destfile="${dir.build}/res.jar">
+      <fileset dir="${dir.resources}" excludes="MANIFEST.MF" />
+    </jar>
+  </target>
+  
+  <target name="export" depends="compile, res-jar">
+    <jar destfile="${dir.export}/testplugin.jar"
+         manifest="${dir.resources}/MANIFEST.MF">
+      <fileset dir="${dir.build.classes}" />
+      <fileset dir="${dir.build}" includes="res.jar" />
+    </jar>
+  </target>
+  
+  <target name="clean">
+    <delete dir="${dir.build}" />
+    <delete dir="${dir.export}" />
+  </target>
+
+</project>

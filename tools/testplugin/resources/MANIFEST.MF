@@ -1,0 +1,2 @@
+Hourglass-Plugin-Class: testplugin.TestPlugin
+Hourglass-Supporting-Libraries: res.jar

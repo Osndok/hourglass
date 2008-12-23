@@ -1,0 +1,90 @@
+# CVS Revision $Revision: 1.5 $
+# Last modified on $Date: 2008/10/25 15:22:52 $ by $Author: ewl $
+
+======================================================================
+ Where to Get More Information
+======================================================================
+
+See the ``INSTALL'' file for information on running hourglass.
+
+Currently, this is it :)  Email mike@acm.jhu.edu if you need help
+after reading the information below.
+
+
+======================================================================
+ Setting Up Your Build Environment
+======================================================================
+
+Hourglass has the following dependencies:
+
+o       Java 1.4.0 or newer
+o       JUnit (http://junit.org)
+o       Log4j (http://jakarta.apache.org/log4j)
+o       Xerces (http://xml.apache.org/xerces2-j)
+o       JCommon (http://www.jfree.org/jcommon/)
+o       JDOM (http://jdom.org)
+
+Before you can compile Hourglass, you will need to set up your build
+environment.  This involves letting the ant build script know how to
+find third-party dependencies.  
+
+Once the dependencies are properly installed, you need to define a
+``local.properties'' file in the BASEDIR/conf directory, where BASEDIR
+is the base directory of the project (the one that contains this
+README and the build.xml file).
+
+The easiest way to get started is simply to copy
+BASEDIR/conf/samples/local.properties to BASEDIR/conf/local.properties
+and modify the properties beginning with ``jar'' to point the the
+respective jar files of the dependencies described above.
+
+Hourglass uses Log4j for all logging output.  By default, Hourglass
+produces no logging output (by using a log4j.properties in the runtime
+classpath).  If you wish to see the log messages, you will need to set
+the ``url.log4j.properties'' property in the local.properties file.
+This should be a URL pointing to a log4j.properties or log4j.xml
+configuration file, for example, 
+
+# url.log4j.properties=file:///home/mike/src/hourglass/conf/log4j.xml
+
+A sample file can be found in BASEDIR/conf/samples/log4j.xml.  This
+configuration file logs all output to a file called ``hourglass.log''
+in the current directory.
+
+
+======================================================================
+ Building 
+======================================================================
+
+Hourglass is build using Apache Ant (http://ant.apache.org).  Here is
+a high-level description of the Ant tasks you will use to build, test,
+and run Hourglass.
+
+# ant compile (default)
+        Compiles Hourglass
+
+# ant run
+        Runs the newly built Hourglass out of the build directory
+
+# ant run.unit-tests
+        Runs the unit tests for Hourglass.  The unit tests are written
+        using the JUnit framework (http://junit.org).  You will need
+        to make sure Ant supports the optinal ``junit'' task, and that
+        junit.jar is in the classpath.
+
+# ant clean
+        Cleans the project.
+
+# ant dist
+        Builds a distribution in the dist directory.  dist/hourglass
+        is the top-level distribution directory.  
+
+
+======================================================================
+ Running the Distribution
+======================================================================
+
+To run the distribution, copy the top-level directory to the path of
+your choice and run
+
+# java -jar /path/of/your/choice/hourglass/lib/hourglass.jar

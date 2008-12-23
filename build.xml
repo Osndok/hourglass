@@ -1,0 +1,333 @@
+<!DOCTYPE project>
+
+
+<project name="hourglass" default="compile">
+
+
+  <property name="dir.conf" value="${basedir}/conf" />
+
+  <!--
+     - Loads in the locally defined build properties
+     -->
+  <property file="${dir.conf}/local.properties" />
+  <property file="${dir.conf}/version.properties" />
+
+  <property name="dir.src" value="${basedir}/src" />
+  <property name="dir.build" value="${basedir}/build" />
+  <property name="dir.src.generated" value="${dir.build}/src" />
+  <property name="dir.dist" value="${basedir}/dist" />
+  <property name="dir.dist.base" 
+            value="${dir.dist}/hourglass-${hourglass.version}" />
+  <property name="dir.build.classes" value="${dir.build}/classes" />
+  <property name="dir.build.instrumented" value="${dir.build}/instrumented" />
+  <property name="dir.build.javadoc" value="${dir.build}/doc/api" />
+  <property name="dir.build.testclasses" value="${dir.build}/testclasses" />
+  <property name="dir.output" value="${basedir}/output" />
+  <property name="dir.resources" value="${basedir}/resources" />
+  <property name="dir.tools" value="${basedir}/tools" />
+  <property name="dir.unit-tests" value="${basedir}/unit-tests" />
+  <property name="dir.acceptance-tests" value="${basedir}/acceptance-tests" />
+
+  <property name="unit-test.suite" value="net.sourceforge.hourglass.AllTests" />
+  <property name="acceptance-test.suite" value="net.sourceforge.hourglass.acceptance.gui.AllTests" />
+  <property name="test.archive" value="ant-test" />
+
+  <path id="classpath.default" />
+
+  <path id="classpath.taskdef">
+    <pathelement location="${dir.tools}/build/export/hourglass-build-tools.jar" />
+  </path>
+
+  <path id="classpath.compile">
+    <path refid="classpath.default" />
+    <pathelement location="${jar.xmlParserApis}" />
+    <pathelement location="${jar.xercesImpl}" />
+    <pathelement location="${jar.jug}" />
+    <pathelement location="${jar.log4j}" />
+    <pathelement location="${jar.jdom}" />
+    <pathelement location="${jar.jcommon}" />
+  </path>
+
+  <path id="classpath.compile.tests">
+    <pathelement location="${dir.build.classes}" />
+    <pathelement location="${jar.junit}" />
+    <pathelement location="${jar.abbot}" />
+    <pathelement location="${jar.jfcunit}" />
+    <pathelement location="${jar.regexp}" />
+    <path refid="classpath.compile" />
+  </path>
+
+  <path id="classpath.run">
+    <pathelement location="${dir.build.classes}" />
+    <path refid="classpath.compile" />
+  </path>
+
+  <path id="classpath.run.tests">
+    <pathelement location="${dir.build.testclasses}" />
+    <pathelement location="${dir.build.instrumented}" />
+    <pathelement location="${jar.jcoverage}" />
+    <pathelement location="${jar.gnu-regexp}" />
+    <path refid="classpath.compile.tests" />
+  </path>
+
+
+  <path id="classpath.jcoverage">
+    <pathelement location="${jar.bcel}" />
+    <pathelement location="${jar.getopt}" />
+    <pathelement location="${jar.oro}" />
+    <pathelement location="${jar.jcoverage}" />
+    <path refid="classpath.compile.tests" />
+  </path>
+
+  <taskdef classpathref="classpath.jcoverage" resource="tasks.properties"/>
+
+  <target name="init">
+    <mkdir dir="${dir.build.classes}" />   
+    <mkdir dir="${dir.build.instrumented}" />
+    <mkdir dir="${dir.build.javadoc}" />
+    <mkdir dir="${dir.build.testclasses}" />
+    <mkdir dir="${dir.dist}" />
+    <mkdir dir="${dir.output}" />
+
+    <tstamp>
+      <format property="buildstamp" pattern="yyyy-MM-dd'T'HH:mmZ" />
+    </tstamp>
+
+    <copy todir="${dir.build.classes}">
+      <fileset dir="${dir.resources}"
+               excludes="**/*.png" />
+      <filterset>
+        <filter token="HOURGLASS.VERSION" value="${hourglass.version}" />
+        <filter token="BUILD.TIME" value="${buildstamp}" />
+      </filterset>
+    </copy>
+    <copy todir="${dir.build.classes}">
+      <fileset dir="${dir.resources}"
+               includes="**/*.png" />
+    </copy>
+  </target>
+  
+  <target name="taskdef" depends="init">
+    <ant inheritall="false" antfile="${dir.tools}/build/build.xml" target="export" />
+    <taskdef classpathref="classpath.taskdef"
+    	resource="net/sourceforge/hourglass/build/hourglass-ant.properties" />
+  </target>
+  
+  <target name="precompile" depends="taskdef">
+    <generateStrings 
+    	srcfile="${dir.resources}/net/sourceforge/hourglass/swingui/strings.txt" 
+    	destfile="${dir.src.generated}/net/sourceforge/hourglass/swingui/Strings.java"
+    	package="net.sourceforge.hourglass.swingui"
+    	class="Strings" />
+    <generateStrings 
+    	srcfile="${dir.resources}/net/sourceforge/hourglass/framework/error_keys.txt" 
+    	destfile="${dir.src.generated}/net/sourceforge/hourglass/framework/ErrorKeys.java"
+    	package="net.sourceforge.hourglass.framework"
+    	class="ErrorKeys" />
+  </target>
+
+  <target name="compile" depends="init, precompile">
+    <javac srcdir="${dir.src.generated}"
+           destdir="${dir.build.classes}"
+   	   debug="yes"
+           classpathref="classpath.compile">
+    </javac>
+    <javac srcdir="${dir.src}"
+           destdir="${dir.build.classes}"
+   	   debug="yes"
+           classpathref="classpath.compile">
+    </javac>
+  </target>
+
+  <target name="compile.tests" depends="compile">
+    <ant inheritall="false" antfile="${dir.tools}/testplugin/build.xml" target="export" />
+    <copy todir="${dir.build.testclasses}/net/sourceforge/hourglass/plugins" 
+          file="${dir.tools}/testplugin/export/testplugin.jar" />
+    <javac srcdir="${dir.unit-tests}"
+           destdir="${dir.build.testclasses}"
+           classpathref="classpath.compile.tests" 
+           debug="yes" />
+    <javac srcdir="${dir.acceptance-tests}"
+           destdir="${dir.build.testclasses}"
+           classpathref="classpath.compile.tests" 
+           debug="yes" />
+  </target>
+  
+  <target name="instrument" depends="compile">
+    <instrument todir="${dir.build.instrumented}">
+      <fileset dir="${dir.build.classes}" />
+    </instrument>
+  </target>
+
+
+  <target name="run.all-tests">
+    <!-- TODO [MGT, 25 Oct 2003]: make a suite instead of running separately. -->
+    <antcall target="run.unit-tests" />
+    <antcall target="run.acceptance-tests" />
+  </target>
+
+
+  <target name="run.unit-tests">
+    <antcall target="run.tests">
+      <param name="test.suite" value="${unit-test.suite}" />
+    </antcall>
+  </target>
+  
+  <target name="run.acceptance-tests">
+    <antcall target="run.tests">
+      <param name="test.suite" value="${acceptance-test.suite}" />
+    </antcall>
+  </target>
+
+  <target name="run.tests" depends="compile, compile.tests">
+    <junit printsummary="yes" haltonfailure="no" fork="yes">
+      <classpath refid="classpath.run.tests" />
+      <jvmarg value="-ea" />
+      <sysproperty 
+        key="log4j.configuration" 
+        value="${url.log4j.properties}" />
+      <sysproperty 
+        key="hg.archive.name" 
+        value="${test.archive}" />
+      <test name="${test.suite}">
+        <formatter type="plain" />
+      </test>
+    </junit>
+  </target>
+  
+  <target name="coverage" depends="instrument, run.all-tests">
+    <report srcdir="${dir.src}" destdir="${dir.output}" />
+    <report srcdir="${dir.src}" destdir="${dir.output}" format="xml"/>
+
+    <echo>
+jcoverage reports have been generated.
+The HTML report is ${dir.output}/index.html
+The XML report is ${dir.output}/coverage.xml
+    </echo>    
+
+    <!-- Remove the instrumented classes to the next run of the tests is faster -->
+    <delete dir="${dir.build.instrumented}" />
+  </target>
+
+  <target name="javadoc" depends="compile">
+    <javadoc sourcepath="${dir.src}"
+             destdir="${dir.build.javadoc}" 
+             packagenames="net.sourceforge.hourglass.*"
+             classpathref="classpath.compile" />
+  </target>
+
+  <target name="run" depends="compile">
+    <antcall target="run.class">
+      <param name="class" 
+        value="net.sourceforge.hourglass.swingui.Main" />
+    </antcall>
+  </target>
+
+  <target name="run.class" depends="compile">
+    <java classname="${class}"
+          classpathref="classpath.run"
+          fork="yes">
+      <sysproperty 
+        key="log4j.configuration" 
+        value="${url.log4j.properties}" />
+      <sysproperty 
+        key="hg.archive.name" 
+        value="${test.archive}" />
+<!--
+      <sysproperty 
+        key="user.language"
+        value="pt" />
+      <sysproperty
+	key="user.country"
+	value="BR" />
+-->
+    </java>
+  </target>     
+
+  <target name="run.class.profile" depends="compile.tests">
+    <java classname="${class}"
+          classpathref="classpath.run.tests"
+          fork="yes">
+      <sysproperty 
+        key="log4j.configuration" 
+        value="${url.log4j.properties}" />
+    </java>
+  </target>
+
+
+  <!--
+     - Equivalent to "dist"... just for name's sake.
+     -->
+  <target name="deploy">
+    <antcall target="dist" />
+  </target>
+
+
+  <!--
+     - Creates the dist directory.
+     -->
+  <target name="dist-makedirectory" depends="compile">
+    <mkdir dir="${dir.dist.base}/lib" />
+    <jar destfile="${dir.dist.base}/lib/hourglass.jar"
+         manifest="${dir.resources}/MANIFEST.MF">
+      <fileset dir="${dir.build.classes}" />
+    </jar>
+
+    <copy todir="${dir.dist.base}" file="${basedir}/AUTHORS" />
+    <copy todir="${dir.dist.base}" file="${basedir}/COPYING" />
+    <copy todir="${dir.dist.base}" file="${basedir}/INSTALL" />
+
+    <copy tofile="${dir.dist.base}/lib/xmlParserAPIs.jar" 
+	  file="${jar.xmlParserApis}" />
+    <copy tofile="${dir.dist.base}/lib/xercesImpl.jar" 
+	  file="${jar.xercesImpl}" />
+    <copy tofile="${dir.dist.base}/lib/log4j.jar" 
+	  file="${jar.log4j}" />
+    <copy tofile="${dir.dist.base}/lib/jdom.jar" 
+	  file="${jar.jdom}" />
+    <copy tofile="${dir.dist.base}/lib/jcommon.jar" 
+	  file="${jar.jcommon}" />
+  </target>  
+
+
+  <target name="dist" depends="dist-makedirectory">
+    <tar destfile="${dir.dist}/hourglass-${hourglass.version}.tar.gz" 
+         compression="gzip">
+      <tarfileset prefix="hourglass-${hourglass.version}"
+                  dir="${dir.dist.base}" />
+    </tar>
+                  
+    <zip destfile="${dir.dist}/hourglass-${hourglass.version}.zip">
+      <zipfileset prefix="hourglass-${hourglass.version}"
+                  dir="${dir.dist.base}" />
+    </zip>
+
+  </target>
+
+  <target name="clean">
+    <delete dir="${dir.build}" />
+    <delete file="${basedir}/jcoverage.ser" />
+  </target>
+
+  <target name="dist-clean" depends="clean">
+    <ant inheritall="false" antfile="${dir.tools}/build/build.xml" target="clean" />
+    <ant inheritall="false" antfile="${dir.tools}/testplugin/build.xml" target="clean" />
+    <delete dir="${dir.dist}" />
+    <delete dir="${dir.output}" />
+    <delete>
+      <fileset dir="${basedir}">
+        <include name="**/TEST*.txt" />
+        <include name="hourglass.log*" />
+      </fileset>
+    </delete>
+  </target>
+
+  <target name="usage">
+    <echo message="Usage:" />
+    <echo message="  run" />
+    <echo message="  clean" />
+    <echo message="  deploy" />
+    <echo message="  compile" />
+  </target>
+
+</project>
