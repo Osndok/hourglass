@@ -40,9 +40,6 @@
 
   <path id="classpath.compile">
     <path refid="classpath.default" />
-    <pathelement location="${jar.xmlParserApis}" />
-    <pathelement location="${jar.xercesImpl}" />
-    <pathelement location="${jar.jug}" />
     <pathelement location="${jar.log4j}" />
     <pathelement location="${jar.jdom}" />
     <pathelement location="${jar.jcommon}" />
@@ -277,10 +274,6 @@ The XML report is ${dir.output}/coverage.xml
     <copy todir="${dir.dist.base}" file="${basedir}/COPYING" />
     <copy todir="${dir.dist.base}" file="${basedir}/INSTALL" />
 
-    <copy tofile="${dir.dist.base}/lib/xmlParserAPIs.jar" 
-	  file="${jar.xmlParserApis}" />
-    <copy tofile="${dir.dist.base}/lib/xercesImpl.jar" 
-	  file="${jar.xercesImpl}" />
     <copy tofile="${dir.dist.base}/lib/log4j.jar" 
 	  file="${jar.log4j}" />
     <copy tofile="${dir.dist.base}/lib/jdom.jar" 

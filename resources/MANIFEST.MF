@@ -1,2 +1,2 @@
 Main-Class: net.sourceforge.hourglass.swingui.Main
-Class-Path: xercesImpl.jar xmlParserAPIs.jar jug.jar log4j.jar jdom.jar jcommon.jar
+Class-Path: log4j.jar jdom.jar jcommon.jar

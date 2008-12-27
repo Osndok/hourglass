@@ -70,7 +70,7 @@ public class ProjectParser extends DefaultHandler {
     
     _factory = factory;
     _reader = XMLReaderFactory.createXMLReader
-      ("org.apache.xerces.parsers.SAXParser");
+      (/* "org.apache.xerces.parsers.SAXParser" */); // if you absolutely want an alternative parser
     _dateFormat = Utilities.getInstance().createDateFormat();
 
     hookReader(_reader);
