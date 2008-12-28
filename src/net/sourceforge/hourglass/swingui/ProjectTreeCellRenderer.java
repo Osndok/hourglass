@@ -54,7 +54,7 @@ public class ProjectTreeCellRenderer extends DefaultTreeCellRenderer {
 	      name = "ROOT (No Parent)";
 	    }
 	    else {
-	      name = p.getName();
+	      name = getProperString(p.getName(), "name");
 	    }
 	
 	    JComponent result = 
@@ -74,9 +74,9 @@ public class ProjectTreeCellRenderer extends DefaultTreeCellRenderer {
   private String createToolTipText(Project p) {
     StringBuffer sb = new StringBuffer();
     sb.append("<html><strong>");
-    sb.append(p.getName()).append("</strong>");
+    sb.append(getProperString(p.getName(), "name")).append("</strong>");
     sb.append("<br>");
-    sb.append(getDescriptionString(p.getDescription()));
+    sb.append(getProperString(p.getDescription(), "description"));
     sb.append("<br>");
     sb.append("Today: " + formatTime(getTime(p, p.getTimeSince
                  (DateUtilities.getBeginningOfDay(new Date()), true))));
@@ -101,15 +101,16 @@ public class ProjectTreeCellRenderer extends DefaultTreeCellRenderer {
   }
 
   /**
-   * Formats the description string for display in a ToolTip.
+   * Formats the given string for display in the GUI, by giving it a default
+   * value of "(no value)" and reducing its size to 40 characters.
    */
-  private String getDescriptionString(String fullDescription) {
-    if (fullDescription == null ||
-        Utilities.getInstance().isAllWhitespace(fullDescription)) {
-      return "(no description)";
+  private String getProperString(String fullString, String what) {
+    if (fullString == null ||
+        Utilities.getInstance().isAllWhitespace(fullString)) {
+      return "(no " + what + ")";
     }
     else {
-      return Utilities.getInstance().chopString(fullDescription, 40, "...");
+      return Utilities.getInstance().chopString(fullString, 40, "...");
     }
   }
 
