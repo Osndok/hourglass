@@ -729,7 +729,7 @@ private JPanel getLeftPanel() {
     Project p = getSelectedProject();
     if (p != null) {
       ProjectEditorDialog dlg = new ProjectEditorDialog
-        (this, "Create a New Project", p);    
+        (this, "Edit Project", p);    
       dlg.setVisible(true);
       if (dlg.getStatus() == ProjectEditorDialog.OK) {
         try {
