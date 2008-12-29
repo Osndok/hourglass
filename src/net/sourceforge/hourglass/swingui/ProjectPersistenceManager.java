@@ -2,6 +2,7 @@
  * Hourglass - a time tracking utility.
  * Copyright (C) 2003 Neil Thier <nthier@alumni.uwaterloo.ca>
  * Portions Copyright (C) 2003 Mike Grant <mike@acm.jhu.edu>
+ * Copyright (C) 2008 Eric Lavarde <ewl@users.sourceforge.net>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -117,13 +118,16 @@ public class ProjectPersistenceManager
    *
    * Checks that the file written to disk is consistent with the data
    * in memory before overwriting the project file
+   *
+   * @param group the ProjectGroup to save.
    */
-  public synchronized void save(ProjectGroup group) throws SAXException, IOException {
+  public synchronized void save(ProjectGroup group)
+    throws SAXException, IOException {
     
     backup(getFile());
 
     /*
-     * Begin by writing to a temp file.
+     * Begin by writing the ProjectGroup to a temp file.
      */
     File tmpFile = File.createTempFile("hourglass", "xml");
     writeProjectFile(tmpFile, group);
@@ -141,7 +145,7 @@ public class ProjectPersistenceManager
         old.delete();
       }
       move(tmpFile, old);
-    } 
+    }
     else {
       throw new ProjectWriteException
         ("Unable to properly write the project file to disk.");
@@ -208,7 +212,7 @@ public class ProjectPersistenceManager
     if (file.exists()) {
       // if the backup file already exists, delete it
       if (backup.exists()) {
-	backup.delete();
+	backup.delete(); // TODO: implement multi-level backups
       }
       File tmp = new File(file.getAbsolutePath());
       move(tmp, backup);
