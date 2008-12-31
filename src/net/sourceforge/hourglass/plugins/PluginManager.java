@@ -40,10 +40,10 @@ import javax.swing.ListModel;
 import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
 
-import net.sourceforge.hourglass.framework.ErrorKeys;
 import net.sourceforge.hourglass.framework.HourglassException;
 import net.sourceforge.hourglass.framework.HourglassPreferences;
 import net.sourceforge.hourglass.swingui.Utilities;
+import net.sourceforge.hourglass.swingui.Strings;
 
 import org.apache.log4j.Logger;
 
@@ -83,7 +83,7 @@ public class PluginManager implements ListModel {
     		s_instance = new PluginManager();
     	}
     	catch (BackingStoreException e) {
-    		throw new HourglassException(e, ErrorKeys.ERROR_KEY_PLUGIN_MGR_INIT, null);
+    		throw new HourglassException(e, Strings.ERROR_KEY_PLUGIN_MGR_INIT, null);
     	}
     }
 
@@ -129,7 +129,7 @@ public class PluginManager implements ListModel {
 		s_logger.error("Error loading plugin " + name + " at file "
 				+ filename, cause);
 		int option = Utilities.getInstance().showConfirmation(null, 
-				ErrorKeys.ERROR_KEY_PLUGIN_LOAD, new String[] { name, filename },
+				Strings.ERROR_KEY_PLUGIN_LOAD, new String[] { name, filename },
 				JOptionPane.YES_NO_OPTION);
 		if (option == JOptionPane.YES_OPTION) {
 			node.removeNode();

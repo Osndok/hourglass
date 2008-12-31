@@ -73,7 +73,7 @@ public class LockManagerTests extends HourglassTestCase {
     }
     catch (HourglassException e) {
       assertTrue(_mgr.isArchiveLocked("archive"));
-      assertEquals(ErrorKeys.ERROR_KEY_CANNOT_LOCK_ARCHIVE, e.getKey());
+      assertEquals(Strings.ERROR_KEY_CANNOT_LOCK_ARCHIVE, e.getKey());
       assertEquals(2, e.getArgs().length);
       assertEquals("archive", e.getArgs()[0]);
       

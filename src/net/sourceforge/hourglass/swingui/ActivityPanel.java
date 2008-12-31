@@ -38,7 +38,6 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-import net.sourceforge.hourglass.framework.ErrorKeys;
 import net.sourceforge.hourglass.framework.Prefs;
 import net.sourceforge.hourglass.framework.HourglassPreferences;
 import net.sourceforge.hourglass.framework.Project;
@@ -176,7 +175,7 @@ public class ActivityPanel extends JPanel implements ClientStateListener, Hourgl
         ClientState cs = ClientState.getInstance();
         if (m_plates[NUM_SPAN_PLATES - 1].getTimeSpan() != null) {
 			cs.resetCurrentTimeSpan();
-            Utilities.getInstance().showError(getParent(), ErrorKeys.ERROR_KEY_TIME_SLOTS_FULL, null);
+            Utilities.getInstance().showError(getParent(), Strings.ERROR_KEY_TIME_SLOTS_FULL, null);
             return;
         }
         refreshPlates(cs.getRunningProject());

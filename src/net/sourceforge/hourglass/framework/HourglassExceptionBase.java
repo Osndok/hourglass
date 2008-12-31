@@ -51,6 +51,8 @@ public class HourglassExceptionBase {
 
 	public static String toString(IHourglassException self) {
 		StringBuffer result = new StringBuffer(self.getClass().getName());
+		// TODO: replace the default Throwable.getLocalizedMessage (which does no localization)
+		// through a real localization function.
 		String message = self.getLocalizedMessage();
 		if (self.getKey() != null) {
 			result.append("(").append(self.getKey()).append(")");
@@ -60,7 +62,7 @@ public class HourglassExceptionBase {
 					"]");
 		}
 		if (message != null) {
-			result.append(": " + self.getLocalizedMessage());
+			result.append(": " + message);
 		}
 
 		return result.toString();

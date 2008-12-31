@@ -24,6 +24,8 @@
  */
 package net.sourceforge.hourglass.framework;
 
+import net.sourceforge.hourglass.swingui.Strings;
+
 /**
  * Thrown when a timespan overlaps some other timespan in the project
  * to which it is being added.
@@ -40,7 +42,7 @@ public class TimeSpanOverlapException extends HourglassRuntimeException {
    * @param timeSpan the <code>TimeSpan</code> that caused the violation
    */
   public TimeSpanOverlapException(TimeSpan timeSpan, Project project) {
-  	super(timeSpan + "overlaps another TimeSpan.", null, ErrorKeys.ERROR_KEY_TIME_SPAN_OVERLAP, null);
+  	super(timeSpan + "overlaps another TimeSpan.", null, Strings.ERROR_KEY_TIME_SPAN_OVERLAP, null);
     _timeSpan = timeSpan;
     _project = project;
   }

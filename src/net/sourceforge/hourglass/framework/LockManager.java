@@ -28,6 +28,7 @@ import java.io.File;
 import java.io.IOException;
 
 import net.sourceforge.hourglass.Constants;
+import net.sourceforge.hourglass.swingui.Strings;
 
 /**
  * Manages locks for the application.
@@ -65,12 +66,12 @@ public class LockManager {
     File lockfile = getLockFileFor(archiveName);
     try {
       if (!lockfile.createNewFile()) {
-        throw new HourglassException(ErrorKeys.ERROR_KEY_CANNOT_LOCK_ARCHIVE, 
+        throw new HourglassException(Strings.ERROR_KEY_CANNOT_LOCK_ARCHIVE, 
             new String[] { archiveName, lockfile.getAbsolutePath() }); 
       }
     }
     catch (IOException e) {
-      throw new HourglassException(e, ErrorKeys.ERROR_KEY_CANNOT_LOCK_ARCHIVE, 
+      throw new HourglassException(e, Strings.ERROR_KEY_CANNOT_LOCK_ARCHIVE, 
           new String[] { archiveName, lockfile.getAbsolutePath() }); 
     }
 
@@ -83,7 +84,7 @@ public class LockManager {
     } 
     catch (IOException e) {
       lockfile.delete();
-      throw new HourglassException(e, ErrorKeys.ERROR_KEY_CANNOT_CREATE_NEW_ARCHIVE,
+      throw new HourglassException(e, Strings.ERROR_KEY_CANNOT_CREATE_NEW_ARCHIVE,
           new String[] { archiveName, result.getAbsolutePath() });
     }
   }

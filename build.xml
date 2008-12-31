@@ -121,11 +121,6 @@
     	destfile="${dir.src.generated}/net/sourceforge/hourglass/framework/Prefs.java"
     	package="net.sourceforge.hourglass.framework"
     	class="Prefs" />
-    <generateStrings 
-    	srcfile="${dir.resources}/net/sourceforge/hourglass/framework/error_keys.txt" 
-    	destfile="${dir.src.generated}/net/sourceforge/hourglass/framework/ErrorKeys.java"
-    	package="net.sourceforge.hourglass.framework"
-    	class="ErrorKeys" />
   </target>
 
   <target name="compile" depends="init, precompile">
