@@ -74,8 +74,8 @@ public class Main implements Constants {
    */
   private void bootstrapGlobalPreferences() {
     HourglassPreferences prefs = HourglassPreferences.getInstance();
-    if (!prefs.getUseDefaultTimeZone() && prefs.getTimeZone() != null) {
-      TimeZone.setDefault(TimeZone.getTimeZone(prefs.getTimeZone()));
+    if (!prefs.getTimezoneUseDefault() && prefs.getTimezone() != null) {
+      TimeZone.setDefault(TimeZone.getTimeZone(prefs.getTimezone()));
     }
   }
 

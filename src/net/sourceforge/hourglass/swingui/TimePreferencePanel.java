@@ -87,15 +87,15 @@ public class TimePreferencePanel
         (newTimeZone != null && _originalTimeZone != null) ||
         (newTimeZone != null && !newTimeZone.equals(_originalTimeZone))) {
 
-      getPreferences().setTimeZone(newTimeZone);
+      getPreferences().setTimezone(newTimeZone);
       setTimezoneSettingsChanged(true);
     }
         
     if (newUseDefaultTimeZone != _originalUseDefaultTimeZone) {
-      getPreferences().setUseDefaultTimeZone(newUseDefaultTimeZone);
+      getPreferences().setTimezoneUseDefault(newUseDefaultTimeZone);
       setSettingsChanged(true);
     }
-    
+
     if (newTimeFormat != _originalTimeFormat) {
         getPreferences().setTimeFormatType(newTimeFormat);
     	setSettingsChanged(true);
@@ -104,8 +104,8 @@ public class TimePreferencePanel
   }
 
   public void initializeSettings() { 
-    _originalUseDefaultTimeZone = getPreferences().getUseDefaultTimeZone();
-    _originalTimeZone = getPreferences().getTimeZone();
+    _originalUseDefaultTimeZone = getPreferences().getTimezoneUseDefault();
+    _originalTimeZone = getPreferences().getTimezone();
     _originalTimeFormat = getPreferences().getTimeFormatType();
 
     if (_originalUseDefaultTimeZone) {
@@ -117,7 +117,7 @@ public class TimePreferencePanel
       getTimeZoneList().setEnabled(true);
     }
 
-    if (getPreferences().getTimeZone() != null) {
+    if (getPreferences().getTimezone() != null) {
       getTimeZoneList().setSelectedValue(_originalTimeZone, true);
     }
     else {

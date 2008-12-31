@@ -52,40 +52,78 @@ public class HourglassPreferences {
   }
 
 
-  public void setUseDefaultTimeZone(boolean b) {
-    putBoolean(Strings.PREFS_TIMEZONE_USE_DEFAULT, b);
-  }
-
-
-  public boolean getUseDefaultTimeZone() {
-    return getBoolean(Strings.PREFS_TIMEZONE_USE_DEFAULT, true);
-  }
-
-
-  public void setTimeZone(String timeZone) {
-    if (timeZone == null) {
-      remove(Strings.PREFS_TIMEZONE);
-    }
-    else {
-      putString(Strings.PREFS_TIMEZONE, timeZone);
-    }
+  public void setSaveAllChanges(boolean b) {
+    putBoolean(Prefs.SAVE_ALL_CHANGES, b);
   }
   
+  public boolean getSaveAllChanges() {
+    return getBoolean(Prefs.SAVE_ALL_CHANGES, false);
+  }
+
+
+  public void setAutosavingEnable(boolean b) {
+    putBoolean(Prefs.AUTOSAVING_ENABLE, b);
+  }
+  
+  public boolean getAutosavingEnable() {
+    return getBoolean(Prefs.AUTOSAVING_ENABLE, false);
+  }
+
+
+  public void setAutosavingIntervalMinutes(int interval) {
+    putInt(Prefs.AUTOSAVING_INTERVAL_MINUTES, interval);
+  }
+
+  public int getAutosavingIntervalMinutes() {
+    return getInt(Prefs.AUTOSAVING_INTERVAL_MINUTES, 30);
+  }
+
+
+  public void setTimezoneUseDefault(boolean b) {
+    putBoolean(Prefs.TIMEZONE_USE_DEFAULT, b);
+  }
+
+  public boolean getTimezoneUseDefault() {
+    return getBoolean(Prefs.TIMEZONE_USE_DEFAULT, true);
+  }
+
+
+  public void setTimezone(String timeZone) {
+    if (timeZone == null) {
+      remove(Prefs.TIMEZONE);
+    }
+    else {
+      putString(Prefs.TIMEZONE, timeZone);
+    }
+  }
+
+  public String getTimezone() {
+    if (getTimezoneUseDefault()) {
+      return null;
+    }
+    else {
+      return getString(Strings.PREFS_TIMEZONE, null);
+    }
+  }
+
+
   public String getTimeFormatType() {
 	  // TODO: use TIME_FORMAT_DEFAULT from localized properties
-  	return getString(Strings.PREFS_TIME_FORMAT_TYPE, Strings.TIME_FORMAT_12_HOUR);
+  	return getString(Prefs.TIME_FORMAT_TYPE, Strings.TIME_FORMAT_12_HOUR);
   }
   
   public void setTimeFormatType(String timeFormatType) {
-  	putString(Strings.PREFS_TIME_FORMAT_TYPE, timeFormatType);
+  	putString(Prefs.TIME_FORMAT_TYPE, timeFormatType);
   }
   
+
   public DateFormat createTimeFormat() {
       return new SimpleDateFormat(getTimeFormatString()); 
   }
   
   public String getTimeFormatString() {
-    return Strings.TIME_FORMAT_24_HOUR.equals(getTimeFormatType()) ? "HH:mm" : "h:mm a";
+    return Strings.TIME_FORMAT_24_HOUR.equals(getTimeFormatType()) ?
+	"HH:mm" : "h:mm a";
   }
 
   public void putBoolean(String preferenceId, boolean value) {
@@ -110,50 +148,19 @@ public class HourglassPreferences {
     _prefs.put(preferenceId, value);
     firePreferenceChanged(preferenceId);
   }
+
+  public String getString(String preferenceId, String defaultValue) {
+    return _prefs.get(preferenceId, defaultValue);
+  }
   
   public void remove(String preferenceId) {
       _prefs.remove(preferenceId);
       firePreferenceChanged(preferenceId);
   }
-  
-  public String getString(String preferenceId, String defaultValue) {
-    return _prefs.get(preferenceId, defaultValue);
-  }
-  
-  public void setEnableAutosave(boolean b) {
-    putBoolean(Strings.PREFS_AUTOSAVING_ENABLE, b);
-  }
-  
-  
-  public boolean getEnableAutosave() {
-    return getBoolean(Strings.PREFS_AUTOSAVING_ENABLE, false);
-  }
-  
-  
-  public void setAutosaveIntervalMinutes(int interval) {
-    putInt(Strings.PREFS_AUTOSAVING_INTERVAL_MINUTES, interval);
-  }
-  
-  
-  public int getAutosaveInteralMinutes() {
-    return getInt(Strings.PREFS_AUTOSAVING_INTERVAL_MINUTES, 30);
-  }
-
-
-  public String getTimeZone() {
-    if (getUseDefaultTimeZone()) {
-      return null;
-    }
-    else {
-      return getString(Strings.PREFS_TIMEZONE, null);
-    }
-  }
-
 
   public static HourglassPreferences getInstance() {
     return __instance;
   }
-
 
   private Logger getLogger() {
     if (_logger == null) {

@@ -36,6 +36,7 @@ import java.util.Iterator;
 import net.sourceforge.hourglass.Constants;
 import net.sourceforge.hourglass.framework.HourglassException;
 import net.sourceforge.hourglass.framework.HourglassPreferences;
+import net.sourceforge.hourglass.framework.Prefs;
 import net.sourceforge.hourglass.framework.LockManager;
 import net.sourceforge.hourglass.framework.Project;
 import net.sourceforge.hourglass.framework.ProjectGroup;
@@ -73,8 +74,8 @@ public class ProjectPersistenceManager
     _file = LockManager.getInstance().lockArchive(_archiveName);
     ClientState.getInstance().getTimer().addTimerListener(this);
     HourglassPreferences.getInstance().addListener(this, new String[] {
-      Strings.PREFS_AUTOSAVING_ENABLE,
-      Strings.PREFS_AUTOSAVING_INTERVAL_MINUTES
+      Prefs.AUTOSAVING_ENABLE,
+      Prefs.AUTOSAVING_INTERVAL_MINUTES
     });
     refreshPreferences();
   }
@@ -277,11 +278,9 @@ public class ProjectPersistenceManager
 
   private void refreshPreferences() {
     _isAutosaveEnabled = 
-      HourglassPreferences.getInstance().getBoolean
-      (Strings.PREFS_AUTOSAVING_ENABLE, false);
+      HourglassPreferences.getInstance().getAutosavingEnable();
     _autosaveInterval = 
-      HourglassPreferences.getInstance().getInt
-      (Strings.PREFS_AUTOSAVING_INTERVAL_MINUTES, 60);
+      HourglassPreferences.getInstance().getAutosavingIntervalMinutes();
     _minutesRemainingUntilAutosave = _autosaveInterval;
     getLogger().debug("isAutosaveEnabled: " + _isAutosaveEnabled);
   }

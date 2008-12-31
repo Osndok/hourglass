@@ -76,21 +76,18 @@ public class GeneralPreferencesPanel extends PreferencePanel {
     boolean isPersistAllEnabled = _persistAllChanges.isSelected();
     int interval = ((Integer) _autosaveIntervalMinutes.getValue()).intValue();
 
-    if (isAutoSaveEnabled != getPreferences().getEnableAutosave()) {
-      getPreferences().setEnableAutosave(isAutoSaveEnabled);
+    if (isAutoSaveEnabled != getPreferences().getAutosavingEnable()) {
+      getPreferences().setAutosavingEnable(isAutoSaveEnabled);
       setSettingsChanged(true);
     }
 
-    if (isPersistAllEnabled
-      != getPreferences().getBoolean(Strings.PREFS_PERSIST_ALL_CHANGES, false)) {
-      getPreferences().putBoolean(
-        Strings.PREFS_PERSIST_ALL_CHANGES,
-        isPersistAllEnabled);
+    if (isPersistAllEnabled != getPreferences().getSaveAllChanges()) {
+      getPreferences().setSaveAllChanges(isPersistAllEnabled);
       setSettingsChanged(true);
     }
 
-    if (interval != getPreferences().getAutosaveInteralMinutes()) {
-      getPreferences().setAutosaveIntervalMinutes(interval);
+    if (interval != getPreferences().getAutosavingIntervalMinutes()) {
+      getPreferences().setAutosavingIntervalMinutes(interval);
       setSettingsChanged(true);
     }
   }
@@ -104,7 +101,7 @@ public class GeneralPreferencesPanel extends PreferencePanel {
       new JCheckBox(getUtilities().getString(Strings.PREFS_AUTOSAVING_ENABLE));
     
     _persistAllChanges =
-      new JCheckBox(getUtilities().getString(Strings.PREFS_PERSIST_ALL_CHANGES));
+      new JCheckBox(getUtilities().getString(Strings.PREFS_SAVE_ALL_CHANGES));
     
     _autosaveIntervalMinutes = new JSpinner(new SpinnerNumberModel());
     _autosaveIntervalMinutes.getEditor().setPreferredSize(
@@ -157,9 +154,9 @@ public class GeneralPreferencesPanel extends PreferencePanel {
   
 
   public void initializeSettings() {
-    boolean isAutosaveEnabled = getPreferences().getEnableAutosave();
-    boolean isPersistAllChangesEnabled = getPreferences().getBoolean(Strings.PREFS_PERSIST_ALL_CHANGES, false);
-    int autosaveInterval = getPreferences().getAutosaveInteralMinutes();
+    boolean isAutosaveEnabled = getPreferences().getAutosavingEnable();
+    boolean isPersistAllChangesEnabled = getPreferences().getSaveAllChanges();
+    int autosaveInterval = getPreferences().getAutosavingIntervalMinutes();
     
     _autosaveEnable.setSelected(isAutosaveEnabled);
     _persistAllChanges.setSelected(isPersistAllChangesEnabled);

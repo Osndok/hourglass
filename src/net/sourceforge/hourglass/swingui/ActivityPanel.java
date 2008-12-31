@@ -39,6 +39,7 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import net.sourceforge.hourglass.framework.ErrorKeys;
+import net.sourceforge.hourglass.framework.Prefs;
 import net.sourceforge.hourglass.framework.HourglassPreferences;
 import net.sourceforge.hourglass.framework.Project;
 import net.sourceforge.hourglass.framework.ProjectGroup;
@@ -59,7 +60,8 @@ public class ActivityPanel extends JPanel implements ClientStateListener, Hourgl
         m_plates = new TimeSpanPlate[NUM_SPAN_PLATES];
         initializeComponents();
         ClientState.getInstance().addClientStateListener(this);
-        HourglassPreferences.getInstance().addListener(this, new String[] { Strings.PREFS_TIME_FORMAT_TYPE });
+        HourglassPreferences.getInstance().addListener(this, new String[] {
+		Prefs.TIME_FORMAT_TYPE });
     }
 
 
@@ -88,7 +90,7 @@ public class ActivityPanel extends JPanel implements ClientStateListener, Hourgl
 
 
     public void preferenceChanged(String id) {
-        if (Strings.PREFS_TIME_FORMAT_TYPE.equals(id)) {
+        if (Prefs.TIME_FORMAT_TYPE.equals(id)) {
             m_timeFormat = HourglassPreferences.getInstance().createTimeFormat();
             refreshPlates(ClientState.getInstance().getSelectedProject());
             for (int i = 0; i < m_plates.length; ++i) {

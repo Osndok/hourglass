@@ -111,11 +111,16 @@
   </target>
   
   <target name="precompile" depends="taskdef">
-    <generateStrings 
+    <generateStrings
     	srcfile="${dir.resources}/net/sourceforge/hourglass/swingui/strings.txt" 
     	destfile="${dir.src.generated}/net/sourceforge/hourglass/swingui/Strings.java"
     	package="net.sourceforge.hourglass.swingui"
     	class="Strings" />
+    <generateStrings 
+    	srcfile="${dir.resources}/net/sourceforge/hourglass/framework/HourglassPreferences.properties" 
+    	destfile="${dir.src.generated}/net/sourceforge/hourglass/framework/Prefs.java"
+    	package="net.sourceforge.hourglass.framework"
+    	class="Prefs" />
     <generateStrings 
     	srcfile="${dir.resources}/net/sourceforge/hourglass/framework/error_keys.txt" 
     	destfile="${dir.src.generated}/net/sourceforge/hourglass/framework/ErrorKeys.java"
