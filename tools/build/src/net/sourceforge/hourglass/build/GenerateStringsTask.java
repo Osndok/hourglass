@@ -43,6 +43,7 @@ import org.apache.tools.ant.Task;
 public class GenerateStringsTask extends Task {
 
   private static final String COMMENT = "#";
+  private static final String ASSIGNMENT = "[ \t]*=[ \t]*";
   private static final String INDENT = "  ";
   
   private File _srcFile;
@@ -107,13 +108,24 @@ public class GenerateStringsTask extends Task {
     }
   }
   
-  
+ /** The trim function removes all comments and assignments (property like) and returns either
+ * the empty string if the resulting string isn't fit for usage as constant/variable name,
+ * or the final {@link java.lang.String#trim() string trimmed from blanks}.
+ * @param line the string to trim.
+ * @return a trimmed string fit for usage as constant/variable name.
+ */
   private String trim(String line) {
-    String str = line.replaceAll(COMMENT + ".*$", "");
-    return str.trim();
+    String str =
+      line.replaceAll(COMMENT + ".*$", "").replaceAll(ASSIGNMENT + ".*$", "").trim();
+    if ( str.equals("") || str.matches("^\\w+$") ) {
+	return str;
+    } else {
+	log("String '" + str + "' rejected because of illegal characters.");
+	return "";
+    }
   }
-  
-  
+
+
   private void writeHeader(PrintWriter r) {
     if (_packageName != null) {
       r.println("package " + _packageName + ";");

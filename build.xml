@@ -112,7 +112,7 @@
   
   <target name="precompile" depends="taskdef">
     <generateStrings
-    	srcfile="${dir.resources}/net/sourceforge/hourglass/swingui/strings.txt" 
+    	srcfile="${dir.resources}/net/sourceforge/hourglass/swingui/resources.properties" 
     	destfile="${dir.src.generated}/net/sourceforge/hourglass/swingui/Strings.java"
     	package="net.sourceforge.hourglass.swingui"
     	class="Strings" />
