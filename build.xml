@@ -136,6 +136,21 @@
     </javac>
   </target>
 
+  <target name="compile.warn" depends="init, precompile">
+    <javac srcdir="${dir.src.generated}"
+           destdir="${dir.build.classes}"
+   	   debug="yes"
+           classpathref="classpath.compile">
+	<compilerarg value="-Xlint"/>
+    </javac>
+    <javac srcdir="${dir.src}"
+           destdir="${dir.build.classes}"
+   	   debug="yes"
+           classpathref="classpath.compile">
+	<compilerarg value="-Xlint"/>
+    </javac>
+  </target>
+
   <target name="compile.tests" depends="compile">
     <ant inheritall="false" antfile="${dir.tools}/testplugin/build.xml" target="export" />
     <copy todir="${dir.build.testclasses}/net/sourceforge/hourglass/plugins" 
