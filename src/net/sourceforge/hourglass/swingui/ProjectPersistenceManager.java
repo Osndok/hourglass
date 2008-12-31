@@ -36,7 +36,6 @@ import java.util.Iterator;
 import net.sourceforge.hourglass.Constants;
 import net.sourceforge.hourglass.framework.HourglassException;
 import net.sourceforge.hourglass.framework.HourglassPreferences;
-import net.sourceforge.hourglass.framework.Prefs;
 import net.sourceforge.hourglass.framework.LockManager;
 import net.sourceforge.hourglass.framework.Project;
 import net.sourceforge.hourglass.framework.ProjectGroup;
@@ -73,10 +72,8 @@ public class ProjectPersistenceManager
     _archiveName = archiveName;
     _file = LockManager.getInstance().lockArchive(_archiveName);
     ClientState.getInstance().getTimer().addTimerListener(this);
-    HourglassPreferences.getInstance().addListener(this, new String[] {
-      Prefs.AUTOSAVING_ENABLE,
-      Prefs.AUTOSAVING_INTERVAL_MINUTES
-    });
+    HourglassPreferences.getInstance().listenAutosavingEnable(this);
+    HourglassPreferences.getInstance().listenAutosavingIntervalMinutes(this);
     refreshPreferences();
   }
   

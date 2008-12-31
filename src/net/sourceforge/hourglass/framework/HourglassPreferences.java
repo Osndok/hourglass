@@ -60,6 +60,10 @@ public class HourglassPreferences {
     return getBoolean(Prefs.SAVE_ALL_CHANGES, false);
   }
 
+  public void listenSaveAllChanges(Listener listener) {
+    addListener(listener, Prefs.SAVE_ALL_CHANGES);
+  }
+
 
   public void setAutosavingEnable(boolean b) {
     putBoolean(Prefs.AUTOSAVING_ENABLE, b);
@@ -67,6 +71,10 @@ public class HourglassPreferences {
   
   public boolean getAutosavingEnable() {
     return getBoolean(Prefs.AUTOSAVING_ENABLE, false);
+  }
+
+  public void listenAutosavingEnable(Listener listener) {
+    addListener(listener, Prefs.AUTOSAVING_ENABLE);
   }
 
 
@@ -78,6 +86,10 @@ public class HourglassPreferences {
     return getInt(Prefs.AUTOSAVING_INTERVAL_MINUTES, 30);
   }
 
+  public void listenAutosavingIntervalMinutes(Listener listener) {
+    addListener(listener, Prefs.AUTOSAVING_INTERVAL_MINUTES);
+  }
+
 
   public void setTimezoneUseDefault(boolean b) {
     putBoolean(Prefs.TIMEZONE_USE_DEFAULT, b);
@@ -85,6 +97,10 @@ public class HourglassPreferences {
 
   public boolean getTimezoneUseDefault() {
     return getBoolean(Prefs.TIMEZONE_USE_DEFAULT, true);
+  }
+
+  public void listenTimezoneUseDefault(Listener listener) {
+    addListener(listener, Prefs.TIMEZONE_USE_DEFAULT);
   }
 
 
@@ -106,6 +122,10 @@ public class HourglassPreferences {
     }
   }
 
+  public void listenTimezone(Listener listener) {
+    addListener(listener, Prefs.TIMEZONE);
+  }
+
 
   public String getTimeFormatType() {
 	  // TODO: use TIME_FORMAT_DEFAULT from localized properties
@@ -115,7 +135,11 @@ public class HourglassPreferences {
   public void setTimeFormatType(String timeFormatType) {
   	putString(Prefs.TIME_FORMAT_TYPE, timeFormatType);
   }
-  
+
+  public void listenTimeFormatType(Listener listener) {
+    addListener(listener, Prefs.TIME_FORMAT_TYPE);
+  }
+
 
   public DateFormat createTimeFormat() {
       return new SimpleDateFormat(getTimeFormatString()); 
@@ -152,7 +176,7 @@ public class HourglassPreferences {
   public String getString(String preferenceId, String defaultValue) {
     return _prefs.get(preferenceId, defaultValue);
   }
-  
+
   public void remove(String preferenceId) {
       _prefs.remove(preferenceId);
       firePreferenceChanged(preferenceId);
@@ -169,22 +193,25 @@ public class HourglassPreferences {
     return _logger;
   }
   
-  
+
   /**
    * Sets up the given HourglassPreferences.Listener to receive preference
    * change events for the specified preference IDs.
    */
   public void addListener(Listener listener, String[] preferenceIds) {
     for (int i = 0; i < preferenceIds.length; ++i) {
-      String eachId = preferenceIds[ i ];
-      if (!_listeners.containsKey(eachId)) {
-        _listeners.put(eachId, new LinkedList());
-      }
-      List list = (List) _listeners.get(eachId);
-      list.add(listener);
+      addListener(listener, preferenceIds[ i ]);
     }
   }
-  
+
+  public void addListener(Listener listener, String preferenceId) {
+      if (!_listeners.containsKey(preferenceId)) {
+        _listeners.put(preferenceId, new LinkedList());
+      }
+      List list = (List) _listeners.get(preferenceId);
+      list.add(listener);
+  }
+
   
   public void firePreferenceChanged(String preferenceId) {
     List l = (List) _listeners.get(preferenceId);

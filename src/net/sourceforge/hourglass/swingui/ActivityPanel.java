@@ -38,8 +38,8 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-import net.sourceforge.hourglass.framework.Prefs;
 import net.sourceforge.hourglass.framework.HourglassPreferences;
+import net.sourceforge.hourglass.framework.Prefs;
 import net.sourceforge.hourglass.framework.Project;
 import net.sourceforge.hourglass.framework.ProjectGroup;
 import net.sourceforge.hourglass.framework.TimeSpan;
@@ -59,8 +59,7 @@ public class ActivityPanel extends JPanel implements ClientStateListener, Hourgl
         m_plates = new TimeSpanPlate[NUM_SPAN_PLATES];
         initializeComponents();
         ClientState.getInstance().addClientStateListener(this);
-        HourglassPreferences.getInstance().addListener(this, new String[] {
-		Prefs.TIME_FORMAT_TYPE });
+        HourglassPreferences.getInstance().listenTimeFormatType(this);
     }
 
 

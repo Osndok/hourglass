@@ -33,7 +33,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import net.sourceforge.hourglass.framework.HourglassPreferences;
-import net.sourceforge.hourglass.framework.Prefs;
 import net.sourceforge.hourglass.framework.Project;
 import net.sourceforge.hourglass.framework.ProjectFactory;
 import net.sourceforge.hourglass.framework.ProjectGroup;
@@ -57,9 +56,7 @@ public class ClientState implements HourglassPreferences.Listener {
     _projectGroup = getProjectFactory().createProjectGroup();
     _timer = new Timer();
     _timer.start();
-    HourglassPreferences.getInstance().addListener(this, new String[] {
-      Prefs.SAVE_ALL_CHANGES
-    });
+    HourglassPreferences.getInstance().listenSaveAllChanges(this);
     refreshPreferences();
   }
 
