@@ -20,7 +20,6 @@ Hourglass has the following dependencies:
 o       Java 1.4.0 or newer
 o       JUnit (http://junit.org)
 o       Log4j (http://jakarta.apache.org/log4j)
-o       Xerces (http://xml.apache.org/xerces2-j)
 o       JCommon (http://www.jfree.org/jcommon/)
 o       JDOM (http://jdom.org)
 
