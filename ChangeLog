@@ -1,5 +1,32 @@
-# CVS Revision $Revision: 1.11 $
+# SVN Revision $Revision: 1.11 $
 # Last modified on $Date: 2008/12/22 16:46:42 $ by $Author: ewl $
+
+version 0.7.1  (01/01/2009)
+
+FIX: alleviate (unconfirmed) risk of loss of data through backup versioning.
+     Closes: https://sourceforge.net/tracker2/?func=detail&aid=1252111&group_id=74405&atid=540902
+FIX: Edit project dialog has now correct title.
+     Closes: https://sourceforge.net/tracker/index.php?func=detail&aid=1603326&group_id=74405&atid=540902
+FIX: projects without name are now shown as (no name) in the GUI.
+     Closes: https://sourceforge.net/tracker2/?func=detail&aid=1603493&group_id=74405&atid=540902
+NEW: new preference to select number of backup versions to keep.
+     Closes: https://sourceforge.net/tracker2/?func=detail&aid=2475130&group_id=74405&atid=540905
+
+DEVELCHANGE: move from cvs to svn usage.
+DEVELCHANGE: moved from JDom0 to JDom1, no special effect expected.
+DEVELCHANGE: remove Xerces from the distribution, it makes Hourglass much
+             slimmer.
+DEVELCHANGE: remove publish target on FTP basis (use ReleaseForge instead).
+DEVELCHANGE: merge ErrorKeys with the Strings and remove error_keys.txt.
+DEVELCHANGE: resources.properties is used instead of strings.txt for
+             generating the Strings class.
+DEVELCHANGE: split strings for translation and strings for preferences.
+             Strings for preferences are now in HourglassPreferences.properties.
+DEVELCHANGE: renamed string PERSIST_ALL_CHANGES to SAVE_ALL_CHANGES.
+DEVELFIX: fixed typo in name of InteralMinutes prefs function (now Interval).
+DEVELNEW: for each mutable preference, there is a listen<Preference> function.
+DEVELNEW: the ant task GenerateStringsTask is now able to generate a class
+          out of a properties-alike file.
 
 version 0.7.0  (22/12/2008)
 
