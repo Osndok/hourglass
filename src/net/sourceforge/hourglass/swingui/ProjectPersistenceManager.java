@@ -74,9 +74,10 @@ public class ProjectPersistenceManager
     ClientState.getInstance().getTimer().addTimerListener(this);
     HourglassPreferences.getInstance().listenAutosavingEnable(this);
     HourglassPreferences.getInstance().listenAutosavingIntervalMinutes(this);
+    HourglassPreferences.getInstance().listenBackupsNumber(this);
     refreshPreferences();
   }
-  
+
   public void releaseBackingFile() {
     LockManager.getInstance().unlockArchive(_archiveName);
   }
@@ -198,22 +199,30 @@ public class ProjectPersistenceManager
   }
 
 
+  protected void backup(File file) throws IOException {
+	backup(file, 0);
+  }
+
   /**
    * Backs up the current data file to getBackupFileName(filename).
    * 
    * @param file the backup file
    */
-  protected void backup(File file) throws IOException {
-    File backup = getBackupFile(file);
+  protected void backup(File file, int num) throws IOException {
+    File backup = getBackupFile(file, num);
 
-    // if it already exists, move it to a backup file
+    // if it already exists, move it to a backup file or delete it
     if (file.exists()) {
-      // if the backup file already exists, delete it
-      if (backup.exists()) {
-	backup.delete(); // TODO: implement multi-level backups
-      }
       File tmp = new File(file.getAbsolutePath());
-      move(tmp, backup);
+      if ( num < _backupsNumber ) { // not enough backups created
+        // if the backup file already exists, delete it
+        if (backup.exists()) {
+	  backup(backup, num+1);
+        }
+        move(tmp, backup);
+      } else {
+        tmp.delete();
+      }
     }
   }
 
@@ -236,16 +245,24 @@ public class ProjectPersistenceManager
   /**
    * Returns a backup filename given the name of the real file.
    */
-  protected String getBackupFileName(String fileName) {
-    return fileName + "~";
+  protected String getBackupFileName(String fileName, int num) {
+    if (num == 0) {
+      return fileName + "~";
+    } else {
+      if (fileName.lastIndexOf('~') > 0) { // the filename contains a tilde
+        return fileName.substring(0, fileName.lastIndexOf('~')) + "~" + num;
+      } else {
+        return fileName + "~" + num;
+      }
+    }
   }
 
 
   /**
    * Returns a backup file given the real file.
    */
-  protected File getBackupFile(File file) {
-    return new File(getBackupFileName(file.getAbsolutePath()));
+  protected File getBackupFile(File file, int num) {
+    return new File(getBackupFileName(file.getAbsolutePath(), num));
   }
 
 
@@ -279,6 +296,8 @@ public class ProjectPersistenceManager
     _autosaveInterval = 
       HourglassPreferences.getInstance().getAutosavingIntervalMinutes();
     _minutesRemainingUntilAutosave = _autosaveInterval;
+    _backupsNumber = 
+      HourglassPreferences.getInstance().getBackupsNumber();
     getLogger().debug("isAutosaveEnabled: " + _isAutosaveEnabled);
   }
 
@@ -319,6 +338,7 @@ public class ProjectPersistenceManager
 
   private boolean _isAutosaveEnabled;
   private int _autosaveInterval;
+  private int _backupsNumber;
   private int _minutesRemainingUntilAutosave;
 
 }
