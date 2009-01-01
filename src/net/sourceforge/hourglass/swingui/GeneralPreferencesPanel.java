@@ -75,6 +75,7 @@ public class GeneralPreferencesPanel extends PreferencePanel {
     boolean isAutoSaveEnabled = _autosaveEnable.isSelected();
     boolean isPersistAllEnabled = _persistAllChanges.isSelected();
     int interval = ((Integer) _autosaveIntervalMinutes.getValue()).intValue();
+    int backups = ((Integer) _backupsNumber.getValue()).intValue();
 
     if (isAutoSaveEnabled != getPreferences().getAutosavingEnable()) {
       getPreferences().setAutosavingEnable(isAutoSaveEnabled);
@@ -90,6 +91,11 @@ public class GeneralPreferencesPanel extends PreferencePanel {
       getPreferences().setAutosavingIntervalMinutes(interval);
       setSettingsChanged(true);
     }
+
+    if (backups != getPreferences().getBackupsNumber()) {
+      getPreferences().setBackupsNumber(backups);
+      setSettingsChanged(true);
+    }
   }
   
   private JComponent createAutosaveSection() {
@@ -102,16 +108,23 @@ public class GeneralPreferencesPanel extends PreferencePanel {
     
     _persistAllChanges =
       new JCheckBox(getUtilities().getString(Strings.PREFS_SAVE_ALL_CHANGES));
-    
+
     _autosaveIntervalMinutes = new JSpinner(new SpinnerNumberModel());
     _autosaveIntervalMinutes.getEditor().setPreferredSize(
       new Dimension(50, _autosaveIntervalMinutes.getPreferredSize().height));   
-      
+
     _intervalLabel =
       new JLabel(
         getUtilities().getFieldLabel(
           Strings.PREFS_AUTOSAVING_INTERVAL_MINUTES));
-          
+
+    _backupsNumber = new JSpinner(new SpinnerNumberModel());
+    _backupsNumber.getEditor().setPreferredSize(
+      new Dimension(50, _backupsNumber.getPreferredSize().height));   
+
+    _backupsLabel = new JLabel(
+        getUtilities().getFieldLabel(Strings.PREFS_BACKUPS_NUMBER) );
+
     _autosaveEnable.addChangeListener(new ChangeListener() {
       public void stateChanged(ChangeEvent e) {
         updateWidgets();
@@ -140,6 +153,18 @@ public class GeneralPreferencesPanel extends PreferencePanel {
       widgetPanel.add(_autosaveIntervalMinutes, c_fld);
     }
 
+    {
+      GridBagConstraints b_lbl = new GridBagConstraints();
+      GridBagConstraints b_fld = new GridBagConstraints();
+      b_lbl.anchor = GridBagConstraints.WEST;
+      b_lbl.insets = new Insets(0, 0, 0, 5);
+      b_fld.gridwidth = GridBagConstraints.REMAINDER;
+      b_fld.anchor = GridBagConstraints.WEST;
+
+      widgetPanel.add(_backupsLabel, b_lbl);
+      widgetPanel.add(_backupsNumber, b_fld);
+    }
+
     result.add(widgetPanel, BorderLayout.WEST);
     return result;
   }
@@ -157,11 +182,13 @@ public class GeneralPreferencesPanel extends PreferencePanel {
     boolean isAutosaveEnabled = getPreferences().getAutosavingEnable();
     boolean isPersistAllChangesEnabled = getPreferences().getSaveAllChanges();
     int autosaveInterval = getPreferences().getAutosavingIntervalMinutes();
-    
+    int backups = getPreferences().getBackupsNumber();
+
     _autosaveEnable.setSelected(isAutosaveEnabled);
     _persistAllChanges.setSelected(isPersistAllChangesEnabled);
     _autosaveIntervalMinutes.setValue(new Integer(autosaveInterval));
-    
+    _backupsNumber.setValue(new Integer(backups));
+
     updateWidgets();
   }
 
@@ -173,10 +200,12 @@ public class GeneralPreferencesPanel extends PreferencePanel {
   public Icon getIcon() {
     return Utilities.getInstance().getIcon(Strings.IMAGE_PREFS_GENERAL);
   }
-  
+
   private JCheckBox _autosaveEnable;
   private JCheckBox _persistAllChanges;
   private JSpinner _autosaveIntervalMinutes;
   private JLabel _intervalLabel;
+  private JSpinner _backupsNumber;
+  private JLabel _backupsLabel;
 
 }

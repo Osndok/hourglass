@@ -91,6 +91,19 @@ public class HourglassPreferences {
   }
 
 
+  public void setBackupsNumber(int backups) {
+    putInt(Prefs.BACKUPS_NUMBER, backups);
+  }
+
+  public int getBackupsNumber() {
+    return getInt(Prefs.BACKUPS_NUMBER, 1);
+  }
+
+  public void listenBackupsNumber(Listener listener) {
+    addListener(listener, Prefs.BACKUPS_NUMBER);
+  }
+
+
   public void setTimezoneUseDefault(boolean b) {
     putBoolean(Prefs.TIMEZONE_USE_DEFAULT, b);
   }
