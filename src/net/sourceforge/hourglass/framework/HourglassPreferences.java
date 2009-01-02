@@ -24,6 +24,7 @@
  */
 package net.sourceforge.hourglass.framework;
 
+import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
@@ -32,6 +33,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.prefs.Preferences;
+import java.util.Properties;
 
 import net.sourceforge.hourglass.swingui.Strings;
 
@@ -49,6 +51,16 @@ public class HourglassPreferences {
   private HourglassPreferences() {
     _prefs = Preferences.userNodeForPackage(getClass());
     _listeners = new HashMap();
+
+    // load the properties file containing preferences definitions
+    _props = new Properties();
+    URL propURL = getClass().getClassLoader().getResource(PREFERENCES_RESOURCE);
+    try {
+      _props.load(propURL.openStream());
+    } catch (java.io.IOException e) {
+	getLogger().error("Preferences couldn't be loaded from '"
+                        + PREFERENCES_RESOURCE + "'.", e);
+    }
   }
 
 
@@ -57,7 +69,7 @@ public class HourglassPreferences {
   }
   
   public boolean getSaveAllChanges() {
-    return getBoolean(Prefs.SAVE_ALL_CHANGES, false);
+    return getBoolean(Prefs.SAVE_ALL_CHANGES);
   }
 
   public void listenSaveAllChanges(Listener listener) {
@@ -70,7 +82,7 @@ public class HourglassPreferences {
   }
   
   public boolean getAutosavingEnable() {
-    return getBoolean(Prefs.AUTOSAVING_ENABLE, false);
+    return getBoolean(Prefs.AUTOSAVING_ENABLE);
   }
 
   public void listenAutosavingEnable(Listener listener) {
@@ -83,7 +95,7 @@ public class HourglassPreferences {
   }
 
   public int getAutosavingIntervalMinutes() {
-    return getInt(Prefs.AUTOSAVING_INTERVAL_MINUTES, 30);
+    return getInt(Prefs.AUTOSAVING_INTERVAL_MINUTES);
   }
 
   public void listenAutosavingIntervalMinutes(Listener listener) {
@@ -96,7 +108,7 @@ public class HourglassPreferences {
   }
 
   public int getBackupsNumber() {
-    return getInt(Prefs.BACKUPS_NUMBER, 1);
+    return getInt(Prefs.BACKUPS_NUMBER);
   }
 
   public void listenBackupsNumber(Listener listener) {
@@ -109,7 +121,7 @@ public class HourglassPreferences {
   }
 
   public boolean getTimezoneUseDefault() {
-    return getBoolean(Prefs.TIMEZONE_USE_DEFAULT, true);
+    return getBoolean(Prefs.TIMEZONE_USE_DEFAULT);
   }
 
   public void listenTimezoneUseDefault(Listener listener) {
@@ -131,7 +143,7 @@ public class HourglassPreferences {
       return null;
     }
     else {
-      return getString(Strings.PREFS_TIMEZONE, null);
+      return getString(Strings.PREFS_TIMEZONE);
     }
   }
 
@@ -142,7 +154,7 @@ public class HourglassPreferences {
 
   public String getTimeFormatType() {
 	  // TODO: use TIME_FORMAT_DEFAULT from localized properties
-  	return getString(Prefs.TIME_FORMAT_TYPE, Strings.TIME_FORMAT_12_HOUR);
+  	return getString(Prefs.TIME_FORMAT_TYPE);
   }
   
   public void setTimeFormatType(String timeFormatType) {
@@ -168,8 +180,14 @@ public class HourglassPreferences {
     firePreferenceChanged(preferenceId);
   }
   
-  public boolean getBoolean(String preferenceId, boolean defaultValue) {
-    return _prefs.getBoolean(preferenceId, defaultValue);
+ /** Gets a (mutable or immutable) preference value using the
+ * {@link #getString(String) getString()} method and casting the result
+ * to a boolean.
+ * @param preferenceId the name of the preference to fetch.
+ * @see #getString(String)
+ */
+  public boolean getBoolean(String preferenceId) {
+	return (new Boolean(getString(preferenceId))).booleanValue();
   }
   
   public void putInt(String preferenceId, int value) {
@@ -177,17 +195,68 @@ public class HourglassPreferences {
     firePreferenceChanged(preferenceId);
   }
   
-  public int getInt(String preferenceId, int defaultValue) {
-    return _prefs.getInt(preferenceId, defaultValue);
+ /** Gets a (mutable or immutable) preference value using the
+ * {@link #getString(String) getString()} method and casting the result
+ * to an int.
+ * @param preferenceId the name of the preference to fetch.
+ * @see #getString(String)
+ */
+  public int getInt(String preferenceId) {
+	return (new Integer(getString(preferenceId))).intValue();
   }
-  
+
   public void putString(String preferenceId, String value) {
     _prefs.put(preferenceId, value);
     firePreferenceChanged(preferenceId);
   }
 
-  public String getString(String preferenceId, String defaultValue) {
-    return _prefs.get(preferenceId, defaultValue);
+ /** Gets a (mutable or immutable) preference value by searching
+ * first in the System properties (adding the prefix "hg."), then in the
+ * actual preferences, and finally in the default properties file.
+ * @param preferenceId the name of the preference to fetch.
+ * @return the string value corresponding to the given preference.
+ * 	A value of null would point to a bug in the code.
+ */
+  public String getString(String preferenceId) {
+	// the following call makes use of the default value of each get
+	// resp. getProperty call.
+	String val = System.getProperty("hg." + preferenceId,
+		_prefs.get(preferenceId,
+		_props.getProperty(preferenceId)
+		));
+	if (val == null) {
+		getLogger().warn("Preference '" + preferenceId
+			+ "' couldn't be retrieved.");
+	}
+	return val;
+  }
+  
+ /** Gets a (mutable or immutable) preference value using the
+ * {@link #getString(String) getString()} method replacing recursively
+ * variables of the type ${pref} through their value either as a System
+ * property or as a preference.
+ * @param preferenceId the name of the preference to fetch.
+ * @see #getString(String)
+ */
+  public String getPath(String preferenceId) {
+	String path = getString(preferenceId);
+	if (path == null) return null;
+	int indirect = getInt(Prefs.MAX_INDIRECTIONS);
+	while (indirect >= 0 && path.matches("${[\\w.]}")) {
+		indirect--;
+		String pref = path.substring(path.indexOf("${")+2,
+					path.indexOf("}"));
+		String val = System.getProperty(pref, getString(pref));
+		if (val == null) {
+			getLogger().warn("Variable '${" + pref
+				+ "}' couldn't be resolved in preference '"
+				+ preferenceId + "' = '" + path + "'.");
+			return null;
+		} else {
+			path = path.replaceAll("${" + pref + "}", val);
+		}
+	}
+	return path;
   }
 
   public void remove(String preferenceId) {
@@ -248,11 +317,14 @@ public class HourglassPreferences {
     public void preferenceChanged(String preferenceId);
   }
 
-
   private Preferences _prefs;
   private Logger _logger;
   private Map _listeners;
+  private Properties _props;
   
+  private final static String PREFERENCES_RESOURCE =
+	"net/sourceforge/hourglass/framework/HourglassPreferences.properties";
+
   private static HourglassPreferences __instance =
     new HourglassPreferences();
 
