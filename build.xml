@@ -105,7 +105,9 @@
   </target>
   
   <target name="taskdef" depends="init">
-    <ant inheritall="false" antfile="${dir.tools}/build/build.xml" target="export" />
+    <ant inheritall="false" antfile="${dir.tools}/build/build.xml" target="export" >
+	<property name="jar.ant" value="${jar.ant}" />
+    </ant>
     <taskdef classpathref="classpath.taskdef"
     	resource="net/sourceforge/hourglass/build/hourglass-ant.properties" />
   </target>
