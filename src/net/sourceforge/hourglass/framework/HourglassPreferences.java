@@ -241,12 +241,13 @@ public class HourglassPreferences {
   public String getPath(String preferenceId) {
 	String path = getString(preferenceId);
 	if (path == null) return null;
-	int indirect = getInt(Prefs.MAX_INDIRECTIONS);
+	int indirect = getInt(Prefs.MAX_INDIRECTIONS); // avoid infinite loops
 	while (indirect >= 0 && path.matches("${[\\w.]}")) {
-		indirect--;
+		indirect--; // avoid infinite loops
 		String pref = path.substring(path.indexOf("${")+2,
 					path.indexOf("}"));
-		String val = System.getProperty(pref, getString(pref));
+		String val = getString(pref);
+		if (val == null) val = System.getProperty(pref);
 		if (val == null) {
 			getLogger().warn("Variable '${" + pref
 				+ "}' couldn't be resolved in preference '"
