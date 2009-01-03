@@ -1,6 +1,7 @@
 /*
  * Hourglass - a time tracking utility.
  * Copyright (C) 2003 Michael K. Grant <mike@acm.jhu.edu>
+ * Copyright (C) 2009 Eric Lavarde <ewl@users.sourceforge.net>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,7 +36,8 @@ import java.io.OutputStream;
 import java.text.DateFormat;
 import java.util.Comparator;
 
-import net.sourceforge.hourglass.Constants;
+import net.sourceforge.hourglass.framework.HourglassPreferences;
+import net.sourceforge.hourglass.framework.Prefs;
 
 import org.apache.log4j.Logger;
 
@@ -151,22 +153,9 @@ public class Utilities {
   
   public File getHourglassDir() {
   	if (m_hourglassDir == null) {
-  		String homeProp = System.getProperty(Constants.HOURGLASS_HOME_PROP);
+		m_hourglassDir = new File(gp().getPath(Prefs.HOURGLASS_DIR));
+	}
 
-  		if (homeProp != null) {
-  			m_hourglassDir = new File(homeProp);
-  			if (!m_hourglassDir.exists()) {
-  				if (!m_hourglassDir.mkdirs()) {
-  					s_logger.error("Couldn't create hourglass home directory " + homeProp);
-  				}
-  			}
-  		}
-		
-		if (m_hourglassDir == null || !m_hourglassDir.exists()) {
-  			m_hourglassDir = new File(System.getProperty("user.home"), Constants.HOURGLASS_DIR_RELATIVE);
-  		}
-  	}
-  	
   	return m_hourglassDir;
   }
   
@@ -182,6 +171,9 @@ public class Utilities {
     return result.toString();
   }
 
+  private static HourglassPreferences gp() {
+	  return HourglassPreferences.getInstance();
+  }
 
   private Comparator m_comparator;
   private File m_hourglassDir;

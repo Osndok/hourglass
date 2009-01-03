@@ -1,6 +1,7 @@
 /*
  * Hourglass - a time tracking utility.
  * Copyright (C) 2003 Michael K. Grant <mike@acm.jhu.edu>
+ * Copyright (C) 2009 Eric Lavarde <ewl@users.sourceforge.net>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,9 +28,9 @@ package net.sourceforge.hourglass.swingui;
 import java.io.File;
 import java.util.TimeZone;
 
-import net.sourceforge.hourglass.Constants;
 import net.sourceforge.hourglass.framework.HourglassException;
 import net.sourceforge.hourglass.framework.HourglassPreferences;
+import net.sourceforge.hourglass.framework.Prefs;
 import net.sourceforge.hourglass.framework.Utilities;
 import net.sourceforge.hourglass.plugins.PluginManager;
 
@@ -40,7 +41,7 @@ import org.apache.log4j.Logger;
  *
  * @author Mike Grant
  */
-public class Main implements Constants {
+public class Main {
 
   /**
    * Runs the application.
@@ -49,11 +50,8 @@ public class Main implements Constants {
     bootstrapGlobalPreferences();
     ensureHourglassDirExists();
     try {
-      String archiveName = DEFAULT_ARCHIVE_NAME;
-      if (System.getProperty(Constants.ARCHIVE_NAME_PROP) != null) {
-        archiveName = System.getProperty(Constants.ARCHIVE_NAME_PROP);
-      }
-      ProjectPersistenceManager persistenceManager = new ProjectPersistenceManager(archiveName);
+      ProjectPersistenceManager persistenceManager = new ProjectPersistenceManager(
+                                                           gp().getPath(Prefs.ARCHIVE_NAME));
       ClientState.getInstance().setPersistenceManager(persistenceManager);
       SummaryFrame sf = new SummaryFrame();
       ClientState.getInstance().setSummaryFrame(sf);
@@ -73,9 +71,8 @@ public class Main implements Constants {
    * Bootstraps any preferences that are globally needed.
    */
   private void bootstrapGlobalPreferences() {
-    HourglassPreferences prefs = HourglassPreferences.getInstance();
-    if (!prefs.getTimezoneUseDefault() && prefs.getTimezone() != null) {
-      TimeZone.setDefault(TimeZone.getTimeZone(prefs.getTimezone()));
+    if (!gp().getTimezoneUseDefault() && gp().getTimezone() != null) {
+      TimeZone.setDefault(TimeZone.getTimeZone(gp().getTimezone()));
     }
   }
 
@@ -85,7 +82,7 @@ public class Main implements Constants {
    * exist, it is created.
    */
   private void ensureHourglassDirExists() {
-    File dir = Utilities.getInstance().getHourglassDir();
+    File dir = gu().getHourglassDir();
     if (!dir.exists()) {
       dir.mkdir();
     }
@@ -97,6 +94,14 @@ public class Main implements Constants {
       _logger = Logger.getLogger(getClass());
     }
     return _logger;
+  }
+
+  private static Utilities gu() {
+	  return Utilities.getInstance();
+  }
+
+  private static HourglassPreferences gp() {
+	  return HourglassPreferences.getInstance();
   }
 
 

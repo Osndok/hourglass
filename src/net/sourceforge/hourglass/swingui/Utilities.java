@@ -1,6 +1,7 @@
 /*
  * Hourglass - a time tracking utility.
  * Copyright (C) 2003 Michael K. Grant <mike@acm.jhu.edu>
+ * Copyright (C) 2009 Eric Lavarde <ewl@users.sourceforge.net>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,7 +44,8 @@ import javax.swing.JDialog;
 import javax.swing.JMenu;
 import javax.swing.JOptionPane;
 
-import net.sourceforge.hourglass.Constants;
+import net.sourceforge.hourglass.framework.HourglassPreferences;
+import net.sourceforge.hourglass.framework.Prefs;
 import net.sourceforge.hourglass.framework.IHourglassException;
 import net.sourceforge.hourglass.framework.Project;
 import net.sourceforge.hourglass.framework.ProjectGroup;
@@ -64,7 +66,7 @@ public class Utilities {
 
 	private void initializeResourceBundle() {
 		m_resources = ResourceBundle
-				.getBundle(Constants.SWINGUI_RESOURCE_BUNDLE);
+				.getBundle(gp().getString(Prefs.SWINGUI_RESOURCE_BUNDLE));
 	}
 
 	/**
@@ -283,8 +285,12 @@ public class Utilities {
 	private static class WrappedOptionPane extends JOptionPane {
 
 		public int getMaxCharactersPerLineCount() {
-			return Constants.ERROR_DIALOG_COLUMN_WIDTH;
+			return gp().getInt(Prefs.ERROR_DIALOG_COLUMN_WIDTH);
 		}
+	}
+
+	private static HourglassPreferences gp() {
+		return HourglassPreferences.getInstance();
 	}
 
 	private ResourceBundle m_resources;

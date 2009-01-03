@@ -1,6 +1,7 @@
 /*
  * Hourglass - a time tracking utility.
  * Copyright (C) 2004 Michael K. Grant <mike@acm.jhu.edu>
+ * Copyright (C) 2009 Eric Lavarde <ewl@users.sourceforge.net>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,7 +28,6 @@ package net.sourceforge.hourglass.framework;
 import java.io.File;
 import java.io.IOException;
 
-import net.sourceforge.hourglass.Constants;
 import net.sourceforge.hourglass.swingui.Strings;
 
 /**
@@ -54,7 +54,7 @@ public class LockManager {
   }
 
   /**
-   * Locks an archive.  The archive name corresponds to a file in {@link Constants#HOURGLASS_DIR}.
+   * Locks an archive.  The archive name corresponds to a file in HOURGLASS_DIR.
    * The filename used for the archive is of the form HOURGLASS_DIR/archive.DATAFILE_EXTENSION. 
    *  
    * @param archiveName the name of the arhive

@@ -245,7 +245,7 @@ The XML report is ${dir.output}/coverage.xml
         key="log4j.configuration" 
         value="${url.log4j.properties}" />
       <sysproperty 
-        key="hg.archive.name" 
+        key="hg.ARCHIVE_NAME"
         value="${test.archive}" />
 <!--
       <sysproperty 

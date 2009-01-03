@@ -2,7 +2,7 @@
  * Hourglass - a time tracking utility.
  * Copyright (C) 2003 Neil Thier <nthier@alumni.uwaterloo.ca>
  * Portions Copyright (C) 2003 Mike Grant <mike@acm.jhu.edu>
- * Copyright (C) 2008 Eric Lavarde <ewl@users.sourceforge.net>
+ * Copyright (C) 2008,2009 Eric Lavarde <ewl@users.sourceforge.net>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,7 +33,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Iterator;
 
-import net.sourceforge.hourglass.Constants;
 import net.sourceforge.hourglass.framework.HourglassException;
 import net.sourceforge.hourglass.framework.HourglassPreferences;
 import net.sourceforge.hourglass.framework.LockManager;
@@ -55,7 +54,7 @@ import org.xml.sax.SAXException;
  * @author Mike Grant <mike@acm.jhu.edu>
  */
 public class ProjectPersistenceManager 
-  implements Constants, TimerListener, HourglassPreferences.Listener {
+  implements TimerListener, HourglassPreferences.Listener {
 
 
   /**
@@ -273,6 +272,10 @@ public class ProjectPersistenceManager
     return _logger;
   }
 
+  private static HourglassPreferences gp() {
+	return HourglassPreferences.getInstance();
+  }
+
 
   /**
    * Moves a file.  If renameTo() doesn't work, fails over to copy and
@@ -291,13 +294,10 @@ public class ProjectPersistenceManager
   }
 
   private void refreshPreferences() {
-    _isAutosaveEnabled = 
-      HourglassPreferences.getInstance().getAutosavingEnable();
-    _autosaveInterval = 
-      HourglassPreferences.getInstance().getAutosavingIntervalMinutes();
+    _isAutosaveEnabled = gp().getAutosavingEnable();
+    _autosaveInterval = gp().getAutosavingIntervalMinutes();
     _minutesRemainingUntilAutosave = _autosaveInterval;
-    _backupsNumber = 
-      HourglassPreferences.getInstance().getBackupsNumber();
+    _backupsNumber = gp().getBackupsNumber();
     getLogger().debug("isAutosaveEnabled: " + _isAutosaveEnabled);
   }
 

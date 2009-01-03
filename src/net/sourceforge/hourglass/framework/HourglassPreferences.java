@@ -242,7 +242,7 @@ public class HourglassPreferences {
 	String path = getString(preferenceId);
 	if (path == null) return null;
 	int indirect = getInt(Prefs.MAX_INDIRECTIONS); // avoid infinite loops
-	while (indirect >= 0 && path.matches("${[\\w.]}")) {
+	while (indirect >= 0 && path.matches(".*\\$\\{[\\w.]+}.*")) {
 		indirect--; // avoid infinite loops
 		String pref = path.substring(path.indexOf("${")+2,
 					path.indexOf("}"));
@@ -254,9 +254,11 @@ public class HourglassPreferences {
 				+ preferenceId + "' = '" + path + "'.");
 			return null;
 		} else {
-			path = path.replaceAll("${" + pref + "}", val);
+			path = path.replaceAll("\\$\\{" + pref + "}", val);
 		}
 	}
+	getLogger().debug("Preference '" + preferenceId + "' resolved to '"
+		+ path + "'.");
 	return path;
   }
 

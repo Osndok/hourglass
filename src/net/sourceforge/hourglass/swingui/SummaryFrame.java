@@ -2,6 +2,7 @@
  * Hourglass - a time tracking utility.
  * Copyright (C) 2003 Michael K. Grant <mike@acm.jhu.edu>
  * Portions Copyright (C) 2003 Neil Thier <nthier@alumni.uwaterloo.ca>
+ * Copyright (C) 2009 Eric Lavarde <ewl@users.sourceforge.net>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -75,7 +76,6 @@ import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
-import net.sourceforge.hourglass.Constants;
 import net.sourceforge.hourglass.framework.IllegalParentException;
 import net.sourceforge.hourglass.framework.MutableProject;
 import net.sourceforge.hourglass.framework.Project;
@@ -105,7 +105,7 @@ public class SummaryFrame
 	private static final long serialVersionUID = 1L;
 
 	public SummaryFrame() {
-		super(Utilities.getInstance().getString(Strings.APPLICATION_TITLE));
+		super(gu().getString(Strings.APPLICATION_TITLE));
 		m_isEditHistMode = false;
 		setName(Strings.SUMMARY_FRAME);
 		initializeComponents();
@@ -129,11 +129,11 @@ public class SummaryFrame
 
 
   private void initializeIcons() {
-    _iconClock = getUtils().getIconFromResourceName
+    _iconClock = gu().getIconFromResourceName
       ("net/sourceforge/hourglass/images/icons/Clock.png");
-    _iconClockGo = getUtils().getIconFromResourceName
+    _iconClockGo = gu().getIconFromResourceName
       ("net/sourceforge/hourglass/images/icons/ClockGo.png");
-    _iconClockStop = getUtils().getIconFromResourceName
+    _iconClockStop = gu().getIconFromResourceName
       ("net/sourceforge/hourglass/images/icons/ClockStop.png");
   }
 
@@ -183,7 +183,7 @@ public class SummaryFrame
 
   private JLabel getCurrentTimeLabel() {
     if (_currentTimeLabel == null) {
-      _currentTimeLabel = new JLabel(Constants.EMPTY_STRING, LEFT);
+      _currentTimeLabel = new JLabel("", LEFT);
     }
     return _currentTimeLabel;
   }
@@ -193,7 +193,7 @@ public class SummaryFrame
     DateFormat df = DateFormat.getDateTimeInstance
       (DateFormat.LONG, DateFormat.SHORT);
     getCurrentTimeLabel().setText
-      (df.format(new Date()) + Constants.SPACE + TimeZone.getDefault().getID());
+      (df.format(new Date()) + " " + TimeZone.getDefault().getID());
   }
 
 
@@ -211,27 +211,27 @@ public class SummaryFrame
   private JMenuBar getMainMenuBar() {
     if (_menuBar == null) {
       _menuBar = new JMenuBar();
-      _menuBar.add(getUtils().createMenuFromResource
+      _menuBar.add(gu().createMenuFromResource
                    (Strings.MENU_FILE, new Action[] {
                      getSaveNowAction(),
                      getExitAction(),
                    }));
-      _menuBar.add(getUtils().createMenuFromResource
+      _menuBar.add(gu().createMenuFromResource
                    (Strings.MENU_EDIT, new Action[] {
                      getPreferencesAction()
                    }));
-      _menuBar.add(getUtils().createMenuFromResource
+      _menuBar.add(gu().createMenuFromResource
                    (Strings.MENU_PROJECT, new Action[] {
                      getAddProjectAction(),
                      getEditProjectAction(),
                      getRemoveProjectAction()
                    }));
       _menuBar.add(getPluginMenu());
-      _menuBar.add(getUtils().createMenuFromResource
+      _menuBar.add(gu().createMenuFromResource
                    (Strings.MENU_REPORTS, new Action[] {
                      getTimecardReportAction(),
                    }));
-      _menuBar.add(getUtils().createMenuFromResource
+      _menuBar.add(gu().createMenuFromResource
                    (Strings.MENU_HELP, new Action[] {
                      getHelpAboutAction()
                    }));
@@ -240,9 +240,9 @@ public class SummaryFrame
     return _menuBar;
   }
 
-private Utilities getUtils() {
-	return Utilities.getInstance();
-}
+  private static Utilities gu() {
+	  return Utilities.getInstance();
+  }
 
   private ActivityPanel getActivityPanel() {
     if (_activityPanel == null) {
@@ -262,7 +262,7 @@ private Utilities getUtils() {
    */
   private boolean doClose() {
 	  if (getClientState().isRunning() && 
-			  getUtils().showConfirmation(this, Strings.CONFIRM_EXIT, null, JOptionPane.YES_NO_OPTION)
+			  gu().showConfirmation(this, Strings.CONFIRM_EXIT, null, JOptionPane.YES_NO_OPTION)
 			  != JOptionPane.YES_OPTION) {
 		  return false;
 	  } else {
@@ -323,7 +323,7 @@ private JPanel getLeftPanel() {
 
   private JButton getToggleButton() {
     if (_toggleButton == null) {
-      _toggleButton = new JButton(getUtils().getString(Strings.START), _iconClockGo);
+      _toggleButton = new JButton(gu().getString(Strings.START), _iconClockGo);
       _toggleButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
               getClientState().toggleTimer();
@@ -339,12 +339,12 @@ private JPanel getLeftPanel() {
   
 	private void updateToggleButtonFromClientState() {
 		if (getClientState().isRunning()) {
-			getToggleButton().setText(getUtils().getString(Strings.STOP));
+			getToggleButton().setText(gu().getString(Strings.STOP));
 			getRunningProjectLabel().setText(getClientState().getRunningProject().getName());
 			getToggleButton().setIcon(_iconClockStop);
 		} else {
-			getToggleButton().setText(getUtils().getString(Strings.START));
-			getRunningProjectLabel().setText(Constants.EMPTY_STRING);
+			getToggleButton().setText(gu().getString(Strings.START));
+			getRunningProjectLabel().setText("");
 			getToggleButton().setIcon(_iconClockGo);
 		}
 	}
@@ -353,7 +353,7 @@ private JPanel getLeftPanel() {
 	public JPanel getProjectPanel() {
     if (_projectPanel == null) {
       _projectPanel = new JPanel(new BorderLayout());
-      _projectPanel.setBorder(BorderFactory.createTitledBorder(getUtils().getString(Strings.PROJECTS)));
+      _projectPanel.setBorder(BorderFactory.createTitledBorder(gu().getString(Strings.PROJECTS)));
       JScrollPane jsp = new JScrollPane(getProjectTree());
       jsp.setPreferredSize(new Dimension(200, 150));
       _projectPanel.add(jsp, BorderLayout.CENTER);
@@ -418,7 +418,7 @@ private JPanel getLeftPanel() {
             
             // The details
             DetailPanel detPanel = new DetailPanel();
-            detPanel.setBorder(BorderFactory.createTitledBorder(getUtils().getString(
+            detPanel.setBorder(BorderFactory.createTitledBorder(gu().getString(
                     Strings.DETAIL_PANEL_HEADER)));
             getClientState().getTimer().addTimerListener(detPanel);
             getClientState().addClientStateListener(detPanel);
@@ -456,8 +456,8 @@ private JPanel getLeftPanel() {
     if (_saveNowAction == null) {
       _saveNowAction = new AbstractAction() {
         {
-          putValue(NAME, getUtils().getString(Strings.SAVE_NOW));
-          putValue(MNEMONIC_KEY, getUtils().getMnemonicAsInt(Strings.SAVE_NOW));
+          putValue(NAME, gu().getString(Strings.SAVE_NOW));
+          putValue(MNEMONIC_KEY, gu().getMnemonicAsInt(Strings.SAVE_NOW));
         }
         public void actionPerformed(ActionEvent ae) {
           try {
@@ -482,8 +482,8 @@ private JPanel getLeftPanel() {
     if (_exitAction == null) {
       _exitAction = new AbstractAction() {
           {
-            putValue(NAME, getUtils().getString(Strings.EXIT));
-            putValue(MNEMONIC_KEY, getUtils().getMnemonicAsInt(Strings.EXIT));
+            putValue(NAME, gu().getString(Strings.EXIT));
+            putValue(MNEMONIC_KEY, gu().getMnemonicAsInt(Strings.EXIT));
           }
           public void actionPerformed(ActionEvent ae) {
             doClose();
@@ -498,8 +498,8 @@ private JPanel getLeftPanel() {
     if (_addProjectAction == null) {
       _addProjectAction = new AbstractAction() {
           {
-            putValue(NAME, getUtils().getString(Strings.ADD_PROJECT));
-            putValue(MNEMONIC_KEY, getUtils().getMnemonicAsInt(Strings.ADD_PROJECT));
+            putValue(NAME, gu().getString(Strings.ADD_PROJECT));
+            putValue(MNEMONIC_KEY, gu().getMnemonicAsInt(Strings.ADD_PROJECT));
           }
           public void actionPerformed(ActionEvent ae) {
 	    addNewProject();
@@ -514,8 +514,8 @@ private JPanel getLeftPanel() {
     if (_removeProjectAction == null) {
       _removeProjectAction = new AbstractAction() {
           {
-            putValue(NAME, getUtils().getString(Strings.REMOVE_PROJECT));
-            putValue(MNEMONIC_KEY, getUtils().getMnemonicAsInt(Strings.REMOVE_PROJECT));
+            putValue(NAME, gu().getString(Strings.REMOVE_PROJECT));
+            putValue(MNEMONIC_KEY, gu().getMnemonicAsInt(Strings.REMOVE_PROJECT));
           }
           public void actionPerformed(ActionEvent ae) {
           	removeProject();
@@ -530,8 +530,8 @@ private JPanel getLeftPanel() {
     if (_preferencesAction == null) {
       _preferencesAction = new AbstractAction() {
           {
-            putValue(NAME, getUtils().getString(Strings.PREFERENCES));
-            putValue(MNEMONIC_KEY, getUtils().getMnemonicAsInt(Strings.PREFERENCES));
+            putValue(NAME, gu().getString(Strings.PREFERENCES));
+            putValue(MNEMONIC_KEY, gu().getMnemonicAsInt(Strings.PREFERENCES));
           }
           public void actionPerformed(ActionEvent ae) {
 	    showPreferencesDialog();
@@ -546,8 +546,8 @@ private JPanel getLeftPanel() {
     if (_editProjectAction == null) {
       _editProjectAction = new AbstractAction() {
           {
-            putValue(NAME, getUtils().getString(Strings.EDIT_PROJECT));
-            putValue(MNEMONIC_KEY, getUtils().getMnemonicAsInt(Strings.EDIT_PROJECT));
+            putValue(NAME, gu().getString(Strings.EDIT_PROJECT));
+            putValue(MNEMONIC_KEY, gu().getMnemonicAsInt(Strings.EDIT_PROJECT));
           }
           public void actionPerformed(ActionEvent ae) {
             editProject();
@@ -562,8 +562,8 @@ private JPanel getLeftPanel() {
     if (_newSubprojectAction == null) {
       _newSubprojectAction = new AbstractAction() {
           {
-            putValue(NAME, getUtils().getString(Strings.NEW_SUBPROJECT));
-            putValue(MNEMONIC_KEY, getUtils().getMnemonicAsInt(Strings.NEW_SUBPROJECT));
+            putValue(NAME, gu().getString(Strings.NEW_SUBPROJECT));
+            putValue(MNEMONIC_KEY, gu().getMnemonicAsInt(Strings.NEW_SUBPROJECT));
           }
           public void actionPerformed(ActionEvent ae) {
             addNewProject(getSelectedProject());
@@ -578,8 +578,8 @@ private JPanel getLeftPanel() {
     if (_helpAboutAction == null) {
       _helpAboutAction = new AbstractAction() {
           {
-            putValue(NAME, getUtils().getString(Strings.ABOUT));
-            putValue(MNEMONIC_KEY, getUtils().getMnemonicAsInt(Strings.ABOUT));
+            putValue(NAME, gu().getString(Strings.ABOUT));
+            putValue(MNEMONIC_KEY, gu().getMnemonicAsInt(Strings.ABOUT));
           }
           public void actionPerformed(ActionEvent ae) {
             new AboutDialog(SummaryFrame.this).setVisible(true);
@@ -593,12 +593,12 @@ private JPanel getLeftPanel() {
     if (_timecardReportAction == null) {
       _timecardReportAction = new AbstractAction() {
           {
-            putValue(NAME, getUtils().getString(Strings.TIMECARD_REPORT));
-            putValue(MNEMONIC_KEY, getUtils().getMnemonicAsInt(Strings.TIMECARD_REPORT));
+            putValue(NAME, gu().getString(Strings.TIMECARD_REPORT));
+            putValue(MNEMONIC_KEY, gu().getMnemonicAsInt(Strings.TIMECARD_REPORT));
           }
           public void actionPerformed(ActionEvent ae) {
             JFrame frame = new JFrame
-              (getUtils().getString(Strings.TIMECARD_REPORT));
+              (gu().getString(Strings.TIMECARD_REPORT));
             frame.setIconImage(((ImageIcon) _iconClock).getImage());
             frame.getContentPane().add
               (new TimecardReportPanel(getClientState().getProjectGroup(), frame),
@@ -949,7 +949,7 @@ private JPanel getLeftPanel() {
   public void selectProject(Project p) {
   	if (p != null) {
 	    TreePath tp = new TreePath
-	      (getUtils().createPathTo
+	      (gu().createPathTo
 	       (p, getProjectGroup()).toArray());
 	
 	    getProjectTree().setSelectionPath(tp);
@@ -990,8 +990,8 @@ private JPanel getLeftPanel() {
   
   private JMenu getPluginMenu() {
   	if (_pluginMenu == null) {
-  		_pluginMenu = getUtils().createMenuFromResource(Strings.MENU_PLUGINS);
-  		_pluginMenu.setMnemonic(getUtils().getMnemonicAsInt(Strings.MENU_PLUGINS));
+  		_pluginMenu = gu().createMenuFromResource(Strings.MENU_PLUGINS);
+  		_pluginMenu.setMnemonic(gu().getMnemonicAsInt(Strings.MENU_PLUGINS));
   		_pluginMenu.addMenuListener(new MenuListener() {
   			public void menuCanceled(MenuEvent e) { }
   			public void menuDeselected(MenuEvent e) { }
