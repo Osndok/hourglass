@@ -625,7 +625,7 @@ private JPanel getLeftPanel() {
    */
   private void addNewProject(Project parent) {
     ProjectEditorDialog dlg = new ProjectEditorDialog
-      (this, "Create a New Project", null);
+      (this, gu().getString(Strings.CREATE_NEW_PROJECT), null);
 
     parent = (parent == null) ? getRootProject() : parent;
     dlg.setParentProject(parent, getClientState().getProjectGroup());
@@ -703,8 +703,9 @@ private JPanel getLeftPanel() {
     if (getPreferencesDialog().isRestartRequired()) {
       JOptionPane.showMessageDialog
         (this, 
-         "Some changes will not take effect until Hourglass is restarted.",
-         "Restart Required", JOptionPane.INFORMATION_MESSAGE);
+         gu().getString(Strings.CHANGES_NO_EFFECT_UNTIL_RESTART),
+         gu().getString(Strings.RESTART_REQUIRED),
+	 JOptionPane.INFORMATION_MESSAGE);
     }      
   }
 
@@ -729,7 +730,7 @@ private JPanel getLeftPanel() {
     Project p = getSelectedProject();
     if (p != null) {
       ProjectEditorDialog dlg = new ProjectEditorDialog
-        (this, "Edit Project", p);    
+        (this, gu().getString(Strings.EDIT_PROJECT), p);    
       dlg.setVisible(true);
       if (dlg.getStatus() == ProjectEditorDialog.OK) {
         try {
@@ -738,14 +739,15 @@ private JPanel getLeftPanel() {
         }
         catch (IllegalParentException ipex) {
           JOptionPane.showMessageDialog
-            (this, "New parent cannot be a subproject.",
-             "Error", JOptionPane.ERROR_MESSAGE);
+            (this, gu().getString(Strings.ERROR_KEY_ILLEGAL_PARENT),
+             gu().getString(Strings.ERROR), JOptionPane.ERROR_MESSAGE);
         }
-      }      
+      }
     }
     else {
       JOptionPane.showMessageDialog
-        (this, "Please select a project first.", "Error",
+        (this, gu().getString(Strings.ERROR_KEY_SELECT_PROJECT),
+	 gu().getString(Strings.ERROR),
          JOptionPane.ERROR_MESSAGE);
     }
   }
@@ -759,15 +761,18 @@ private JPanel getLeftPanel() {
     Project p = getSelectedProject();
     if (p != null) {
       int result = JOptionPane.showConfirmDialog
-        (this, "Delete Project \"" + p.getName() + "\"?", "Confirm Delete",
-         JOptionPane.YES_NO_OPTION);
+        (this, gu().getString(Strings.DELETE_PROJECT_QUESTION,
+					new String[] {p.getName()}),
+		gu().getString(Strings.DELETE_PROJECT_CONFIRM),
+		JOptionPane.YES_NO_OPTION);
       if (result == JOptionPane.YES_OPTION) {
       	getClientState().removeProject(p);
       }
     }
     else {
       JOptionPane.showMessageDialog
-        (this, "Please select a project first.", "Error",
+        (this, gu().getString(Strings.ERROR_KEY_SELECT_PROJECT),
+	 gu().getString(Strings.ERROR),
          JOptionPane.ERROR_MESSAGE);
     }
   }
@@ -1098,5 +1103,4 @@ private JPanel getLeftPanel() {
   
   private static String DETAIL_PANEL_KEY = "DETAIL_PANEL_KEY";
   private static String CALENDAR_PANEL_KEY = "CALENDAR_PANEL_KEY";
-
 }

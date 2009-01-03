@@ -1,6 +1,7 @@
 /*
- * Hourglass - a time tracking utility. Copyright (C) 2003 Michael K. Grant
- * <mike@acm.jhu.edu>
+ * Hourglass - a time tracking utility.
+ * Copyright (C) 2003 Michael K. Grant <mike@acm.jhu.edu>
+ * Copyright (C) 2009 Eric Lavarde <ewl@users.sourceforge.net>
  * 
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
@@ -108,7 +109,8 @@ public class TimecardReportPanel extends JPanel {
     private JComponent createHeader() {
         JPanel result = new JPanel(new BorderLayout());
 
-        JLabel headerLabel = new JLabel(Utilities.getInstance().getString(Strings.TIMECARD_REPORT));
+        JLabel headerLabel = new JLabel(
+			gu().getString(Strings.TIMECARD_REPORT));
         headerLabel.setBorder(BorderFactory.createEmptyBorder(3, 5, 2, 5));
         headerLabel.setBackground(Color.WHITE);
         headerLabel.setOpaque(true);
@@ -163,9 +165,13 @@ public class TimecardReportPanel extends JPanel {
         c_lbl.gridwidth = 1;
         c_lbl.insets = new Insets(10, 10, 10, 10);
 
-        JRadioButton hhMmFormat = new JRadioButton("Use hh:mm format");
+        JRadioButton hhMmFormat = new JRadioButton(
+			gu().getString(Strings.TIMECARD_USE_FORMAT,
+					new String[] {"hh:mm"}));
         hhMmFormat.setActionCommand(HHMM_FORMAT);
-        JRadioButton decimalFormat = new JRadioButton("Use #.00 format");
+        JRadioButton decimalFormat = new JRadioButton(
+			gu().getString(Strings.TIMECARD_USE_FORMAT,
+					new String[] {"#.00"}));
         decimalFormat.setActionCommand(DECIMAL_FORMAT);
 
         _buttonGroup = new ButtonGroup();
@@ -179,10 +185,12 @@ public class TimecardReportPanel extends JPanel {
         _endDateField.setText(_dateFormat.format(endDate));
 
 
-        contentPanel.add(new JLabel("Report start date"), c_lbl);
+        contentPanel.add(new JLabel(
+		gu().getString(Strings.TIMECARD_START_DATE)), c_lbl);
         contentPanel.add(_startDateField);
         contentPanel.add(hhMmFormat, c_radio);
-        contentPanel.add(new JLabel("Report end date"), c_lbl);
+        contentPanel.add(new JLabel(
+		gu().getString(Strings.TIMECARD_END_DATE)), c_lbl);
         contentPanel.add(_endDateField);
         contentPanel.add(decimalFormat, c_radio);
 
@@ -190,8 +198,8 @@ public class TimecardReportPanel extends JPanel {
 
         result.add(contentPanel, BorderLayout.WEST);
 
-        result.setBorder(BorderFactory.createTitledBorder(Utilities.getInstance().getString(
-                Strings.OPTIONS)));
+        result.setBorder(BorderFactory.createTitledBorder(
+				gu().getString(Strings.OPTIONS)));
 
         return result;
     }
@@ -214,7 +222,8 @@ public class TimecardReportPanel extends JPanel {
             	if (value != null && value.equals(projectGroup.getRootProject())) {
             		result.setFont(UIManager.getFont("Table.font").deriveFont(Font.BOLD));
                     result.setBorder(TOTAL_BORDER);
-					result.setText("Total");
+					result.setText(
+						gu().getString(Strings.TOTAL));
 					result.setIcon(null);
             	}
 				return result;
@@ -256,9 +265,9 @@ public class TimecardReportPanel extends JPanel {
             _closeAction = new AbstractAction() {
 
                 {
-                    // TODO [MGT, 25 Oct 2003]: externalize string
-                    putValue(NAME, "Close timecard");
-                    putValue(MNEMONIC_KEY, new Integer('c'));
+                    putValue(NAME, gu().getString(Strings.TIMECARD_CLOSE));
+                    putValue(MNEMONIC_KEY,
+			gu().getMnemonicAsInt(Strings.TIMECARD_CLOSE));
                 }
 
                 public void actionPerformed(ActionEvent ae) {
@@ -274,9 +283,9 @@ public class TimecardReportPanel extends JPanel {
             _updateAction = new AbstractAction() {
 
                 {
-                    // TODO [MGT, 25 Oct 2003]: externalize string
-                    putValue(NAME, "Update timecard");
-                    putValue(MNEMONIC_KEY, new Integer('u'));
+                    putValue(NAME, gu().getString(Strings.TIMECARD_UPDATE));
+                    putValue(MNEMONIC_KEY,
+			gu().getMnemonicAsInt(Strings.TIMECARD_UPDATE));
                 }
 
                 public void actionPerformed(ActionEvent ae) {
@@ -287,7 +296,8 @@ public class TimecardReportPanel extends JPanel {
                             Date endDate = _dateFormat.parse(_endDateField.getText());
                             if (endDate.before(startDate)) {
                                 JOptionPane.showMessageDialog(TimecardReportPanel.this,
-                                        "Start date must be before end date.", "Error",
+                                gu().getString(Strings.ERROR_KEY_DATE_START_AFTER_END),
+                                gu().getString(Strings.ERROR),
                                         JOptionPane.ERROR_MESSAGE);
                             }
                             else {
@@ -305,8 +315,11 @@ public class TimecardReportPanel extends JPanel {
                     }
                     catch (ParseException e) {
                         JOptionPane.showMessageDialog(TimecardReportPanel.this,
-                                "Error parsing dates.  Please use format " + DateUtilities.SHORT_DATE_FORMAT_STRING,
-                                "Error", JOptionPane.ERROR_MESSAGE);
+                                gu().getString(Strings.ERROR_KEY_PARSING_DATE,
+					new String[] {gu().getString(
+					Strings.SHORT_DATE_FORMAT_STRING)}),
+                                gu().getString(Strings.ERROR),
+				JOptionPane.ERROR_MESSAGE);
                         __logger.error("getUpdateAction", e);
                     }
                 }
@@ -346,6 +359,11 @@ public class TimecardReportPanel extends JPanel {
 
     private TimecardTreeTableModel _model;
     private ProjectGroup _projectGroup;
+
+
+  private static Utilities gu() {
+	  return Utilities.getInstance();
+  }
 
     private static final Logger __logger = Logger.getLogger(TimecardReportPanel.class);
 

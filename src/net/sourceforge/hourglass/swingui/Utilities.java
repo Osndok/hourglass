@@ -49,6 +49,7 @@ import net.sourceforge.hourglass.framework.Prefs;
 import net.sourceforge.hourglass.framework.IHourglassException;
 import net.sourceforge.hourglass.framework.Project;
 import net.sourceforge.hourglass.framework.ProjectGroup;
+import net.sourceforge.hourglass.BaseUtilities;
 
 import org.apache.log4j.Logger;
 
@@ -57,16 +58,11 @@ import org.apache.log4j.Logger;
  * 
  * @author Mike Grant
  */
-public class Utilities {
+public class Utilities extends BaseUtilities {
 
 	private static final String MNEMONIC_RESOURCE_SUFFIX = ".mnemonic";
 	private Utilities() {
-		initializeResourceBundle();
-	}
-
-	private void initializeResourceBundle() {
-		m_resources = ResourceBundle
-				.getBundle(gp().getString(Prefs.SWINGUI_RESOURCE_BUNDLE));
+		super();
 	}
 
 	/**
@@ -110,7 +106,7 @@ public class Utilities {
 	 * Returns an icon identified by the given resource key
 	 */
 	public Icon getIcon(String resourceKey) {
-		return getIconFromResourceName(m_resources.getString(resourceKey));
+		return getIconFromResourceName(getString(resourceKey));
 	}
 
 	/**
@@ -177,28 +173,9 @@ public class Utilities {
 	}
 
 	private char getMnemonic(String resourceKey) {
-		String mnemonicStr = m_resources.getString(resourceKey + MNEMONIC_RESOURCE_SUFFIX);
+		String mnemonicStr = getString(resourceKey + MNEMONIC_RESOURCE_SUFFIX);
 		char mnemonic = mnemonicStr.charAt(0);
 		return mnemonic;
-	}
-
-	/**
-	 * Returns the localized string with the given key.
-	 */
-	public String getString(String resourceKey) {
-		String result = null;
-		try {
-			result = m_resources.getString(resourceKey);
-		} catch (MissingResourceException e) {
-			// Allow result to remain null, handled below.
-			getLogger().debug(e);
-		}
-		return result == null ? "[MISSING: " + resourceKey + "]" : result;
-	}
-
-	public String getString(String resourceKey, String[] args) {
-		String unformattedMsg = getString(resourceKey);
-		return MessageFormat.format(unformattedMsg, (Object[]) args);
 	}
 
 	public void showError(Component parent, String key, String[] args) {
@@ -292,8 +269,6 @@ public class Utilities {
 	private static HourglassPreferences gp() {
 		return HourglassPreferences.getInstance();
 	}
-
-	private ResourceBundle m_resources;
 
 	private Logger m_logger;
 

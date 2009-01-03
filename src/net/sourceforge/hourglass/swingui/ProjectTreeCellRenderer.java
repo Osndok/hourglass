@@ -2,6 +2,7 @@
  * Hourglass - a time tracking utility.
  * Copyright (C) 2003 Michael K. Grant <mike@acm.jhu.edu>
  * Portions Copyright (C) 2003 Neil Thier <nthier@alumni.uwaterloo.ca>
+ * Copyright (C) 2009 Eric Lavarde <ewl@users.sourceforge.net>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,6 +34,8 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 
 import net.sourceforge.hourglass.framework.DateUtilities;
 import net.sourceforge.hourglass.framework.Project;
+import net.sourceforge.hourglass.framework.HourglassPreferences;
+import net.sourceforge.hourglass.framework.Prefs;
 
 
 /**
@@ -51,10 +54,10 @@ public class ProjectTreeCellRenderer extends DefaultTreeCellRenderer {
 	    Project p = (Project) value;
 	    String name;
 	    if (p.equals(tree.getModel().getRoot())) {
-	      name = "ROOT (No Parent)";
+	      name = gu().getString(Strings.ROOT_NO_PARENT);
 	    }
 	    else {
-	      name = getProperString(p.getName(), "name");
+	      name = getProperString(p.getName(), Strings.NO_NAME);
 	    }
 	
 	    JComponent result = 
@@ -74,14 +77,16 @@ public class ProjectTreeCellRenderer extends DefaultTreeCellRenderer {
   private String createToolTipText(Project p) {
     StringBuffer sb = new StringBuffer();
     sb.append("<html><strong>");
-    sb.append(getProperString(p.getName(), "name")).append("</strong>");
+    sb.append(getProperString(p.getName(),
+		Strings.NO_NAME)).append("</strong>");
     sb.append("<br>");
-    sb.append(getProperString(p.getDescription(), "description"));
+    sb.append(getProperString(p.getDescription(), Strings.NO_DESCRIPTION));
     sb.append("<br>");
-    sb.append("Today: " + formatTime(getTime(p, p.getTimeSince
+    sb.append(gu().getString(Strings.TODAY_COLON) + " "
+		+ formatTime(getTime(p, p.getTimeSince
                  (DateUtilities.getBeginningOfDay(new Date()), true))));
-    sb.append(" - Total: " + formatTime
-              (getTime(p, p.getTotalTime(true))));
+    sb.append(" - " + gu().getString(Strings.TOTAL_COLON) + " "
+		+ formatTime(getTime(p, p.getTotalTime(true))));
     sb.append("<html>");
 
     return sb.toString();
@@ -105,12 +110,13 @@ public class ProjectTreeCellRenderer extends DefaultTreeCellRenderer {
    * value of "(no value)" and reducing its size to 40 characters.
    */
   private String getProperString(String fullString, String what) {
-    if (fullString == null ||
-        Utilities.getInstance().isAllWhitespace(fullString)) {
-      return "(no " + what + ")";
+    if (fullString == null || gu().isAllWhitespace(fullString)) {
+      return "(" + gu().getString(what) + ")";
     }
     else {
-      return Utilities.getInstance().chopString(fullString, 40, "...");
+      return gu().chopString(fullString,
+		gp().getInt(Prefs.TOOLTIP_CHOP_WIDTH),
+		gp().getString(Prefs.TOOLTIP_CHOP_STRING));
     }
   }
 
@@ -125,6 +131,14 @@ public class ProjectTreeCellRenderer extends DefaultTreeCellRenderer {
     return 
       ((hours < 10) ? "0" : "") + hours + ":" + 
       ((minutes < 10) ? "0" : "") + minutes;
+  }
+
+  private static Utilities gu() {
+	  return Utilities.getInstance();
+  }
+
+  private static HourglassPreferences gp() {
+	  return HourglassPreferences.getInstance();
   }
 
   private static final long MS_PER_MINUTE = 60000;

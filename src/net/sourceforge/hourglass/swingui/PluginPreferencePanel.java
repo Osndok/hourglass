@@ -1,6 +1,7 @@
 /*
  * Hourglass - a time tracking utility.
  * Copyright (C) 2003 Michael K. Grant <mike@acm.jhu.edu>
+ * Copyright (C) 2009 Eric Lavarde <ewl@users.sourceforge.net>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -107,7 +108,8 @@ public class PluginPreferencePanel
     }
 
     private Action createRemoveAction() {
-        return new AbstractAction("Remove") {
+        return new AbstractAction(
+				gu().getString(Strings.PREFS_PLUGINS_REMOVE)) {
                 public void actionPerformed(ActionEvent ae) {
                     Plugin plugin = (Plugin) getPluginList().getSelectedValue();
                     if (plugin != null) {
@@ -124,7 +126,8 @@ public class PluginPreferencePanel
     }
 
     private Action createAddAction() {
-        return new AbstractAction("Add") {
+        return new AbstractAction(
+				gu().getString(Strings.PREFS_PLUGINS_ADD)) {
                 public void actionPerformed(ActionEvent ae) {
                     JFileChooser chooser = new JFileChooser();
                     int returnValue = chooser.showOpenDialog(ClientState.getInstance().getSummaryFrame());
@@ -145,4 +148,8 @@ public class PluginPreferencePanel
     public boolean isRestartRequired() {
         return false;
     }
+
+  private static Utilities gu() {
+	  return Utilities.getInstance();
+  }
 }

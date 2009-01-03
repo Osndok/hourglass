@@ -2,6 +2,7 @@
  * Hourglass - a time tracking utility.
  * Copyright (C) 2003 Michael K. Grant <mike@acm.jhu.edu>
  * Portions Copyright (C) 2003 Neil Thier <nthier@alumni.uwaterloo.ca>
+ * Copyright (C) 2009 Eric Lavarde <ewl@users.sourceforge.net>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -56,7 +57,7 @@ public class ClientState implements HourglassPreferences.Listener {
     _projectGroup = getProjectFactory().createProjectGroup();
     _timer = new Timer();
     _timer.start();
-    HourglassPreferences.getInstance().listenSaveAllChanges(this);
+    gp().listenSaveAllChanges(this);
     refreshPreferences();
   }
 
@@ -270,7 +271,7 @@ public class ClientState implements HourglassPreferences.Listener {
 			}
 		}
 		catch (TimeSpanOverlapException tsoex) {
-			Utilities.getInstance().showError(getSummaryFrame(), tsoex);
+			gu().showError(getSummaryFrame(), tsoex);
 			fireSelectedProjectChanged(getSelectedProject());
 		}
 		catch (SAXException e) {
@@ -444,8 +445,7 @@ public class ClientState implements HourglassPreferences.Listener {
   }
   
   private void refreshPreferences() {
-    m_persistAllChanges =
-      HourglassPreferences.getInstance().getSaveAllChanges();
+    m_persistAllChanges = gp().getSaveAllChanges();
   }
   
   public ProjectPersistenceManager getPersistenceManager() {
@@ -454,6 +454,14 @@ public class ClientState implements HourglassPreferences.Listener {
   
   public void setPersistenceManager(ProjectPersistenceManager mgr) {
     _persistenceManager = mgr;
+  }
+
+  private static Utilities gu() {
+	  return Utilities.getInstance();
+  }
+
+  private static HourglassPreferences gp() {
+	  return HourglassPreferences.getInstance();
   }
 
   private SummaryFrame _summaryFrame;

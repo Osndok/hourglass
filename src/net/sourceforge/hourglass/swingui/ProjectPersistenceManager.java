@@ -40,7 +40,6 @@ import net.sourceforge.hourglass.framework.Project;
 import net.sourceforge.hourglass.framework.ProjectGroup;
 import net.sourceforge.hourglass.framework.ProjectParser;
 import net.sourceforge.hourglass.framework.ProjectWriter;
-import net.sourceforge.hourglass.framework.Utilities;
 import net.sourceforge.hourglass.framework.local.LocalProjectFactory;
 
 import org.apache.log4j.Logger;
@@ -71,9 +70,9 @@ public class ProjectPersistenceManager
     _archiveName = archiveName;
     _file = LockManager.getInstance().lockArchive(_archiveName);
     ClientState.getInstance().getTimer().addTimerListener(this);
-    HourglassPreferences.getInstance().listenAutosavingEnable(this);
-    HourglassPreferences.getInstance().listenAutosavingIntervalMinutes(this);
-    HourglassPreferences.getInstance().listenBackupsNumber(this);
+    gp().listenAutosavingEnable(this);
+    gp().listenAutosavingIntervalMinutes(this);
+    gp().listenBackupsNumber(this);
     refreshPreferences();
   }
 
@@ -272,10 +271,6 @@ public class ProjectPersistenceManager
     return _logger;
   }
 
-  private static HourglassPreferences gp() {
-	return HourglassPreferences.getInstance();
-  }
-
 
   /**
    * Moves a file.  If renameTo() doesn't work, fails over to copy and
@@ -284,7 +279,7 @@ public class ProjectPersistenceManager
   private void move(File source, File target) throws IOException {
     boolean renameSucceeded = source.renameTo(target);
     if (!renameSucceeded) {
-      Utilities.copy(source, target);
+      gu().copy(source, target);
       source.delete();
     }
   }
@@ -324,6 +319,14 @@ public class ProjectPersistenceManager
 
   protected File getFile() {
     return _file;
+  }
+
+  private static Utilities gu() {
+	  return Utilities.getInstance();
+  }
+
+  private static HourglassPreferences gp() {
+	  return HourglassPreferences.getInstance();
   }
   
   public void secondChanged() { }

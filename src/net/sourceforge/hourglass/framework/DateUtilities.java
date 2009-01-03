@@ -2,6 +2,7 @@
  * Hourglass - a time tracking utility.
  * Copyright (C) 2003 Neil Thier <nthier@alumni.uwaterloo.ca>
  * Portions Copyright (C) 2003 Michael K. Grant <mike@acm.jhu.edu>
+ * Copyright (C) 2009 Eric Lavarde <ewl@users.sourceforge.net>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,6 +31,7 @@ import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import net.sourceforge.hourglass.swingui.Strings;
 
 /**
  * Defines commonly used date operations.
@@ -39,7 +41,6 @@ import java.util.Date;
  */
 public class DateUtilities {
 
-	public static final String SHORT_DATE_FORMAT_STRING = "MM/dd/yyyy";
 	public static final long MS_PER_MINUTE = 60000;
 	public static final long MS_PER_HOUR = MS_PER_MINUTE * 60;
 
@@ -148,8 +149,12 @@ public class DateUtilities {
 	}
 
 	public static DateFormat createShortDateFormat() {
-		return new SimpleDateFormat(SHORT_DATE_FORMAT_STRING);
+		return new SimpleDateFormat(
+			gu().getString(Strings.SHORT_DATE_FORMAT_STRING));
 	}
 
+  private static Utilities gu() {
+	  return Utilities.getInstance();
+  }
 }
 

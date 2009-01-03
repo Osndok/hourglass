@@ -2,6 +2,7 @@
  * Hourglass - a time tracking utility.
  * Copyright (C) 2003 Michael K. Grant <mike@acm.jhu.edu>
  * Portions Copyright (C) 2003 Neil Thier <nthier@alumni.uwaterloo.ca>
+ * Copyright (C) 2009 Eric Lavarde <ewl@users.sourceforge.net>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -225,8 +226,8 @@ public class TimeSpanPlate extends JPanel {
          * Take the existing date and splice it with the new times to get the
          * replacement dates.
          */
-        Date newStartDate = Utilities.getInstance().spliceDate(today, newStartTime);
-        Date newEndDate = Utilities.getInstance().spliceDate(today, newEndTime);
+        Date newStartDate = gu().spliceDate(today, newStartTime);
+        Date newEndDate = gu().spliceDate(today, newEndTime);
 
         try {
             TimeSpan replacement = new TimeSpan(newStartDate, newEndDate);
@@ -234,12 +235,15 @@ public class TimeSpanPlate extends JPanel {
             setEditMode(false);
             ClientState.getInstance().replaceTimeSpan(getTimeSpan(), replacement);
         } catch (IllegalArgumentException iaex) {
-            JOptionPane.showMessageDialog(ClientState.getInstance().getSummaryFrame(),
-                    "Start time must be before end time.", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(
+			ClientState.getInstance().getSummaryFrame(),
+			gu().getString(Strings.ERROR_KEY_TIME_START_AFTER_END),
+			gu().getString(Strings.ERROR),
+			JOptionPane.ERROR_MESSAGE);
 
             abortEdits();
         } catch (TimeSpanOverlapException tsex) {
-        	Utilities.getInstance().showError(ClientState.getInstance().getSummaryFrame(), tsex);
+        	gu().showError(ClientState.getInstance().getSummaryFrame(), tsex);
             abortEdits();
         }
     }
@@ -263,7 +267,7 @@ public class TimeSpanPlate extends JPanel {
 
     private JSpinner.DateEditor createSpinnerEditor(final JSpinner result) {
         JSpinner.DateEditor de = new JSpinner.DateEditor(
-                result, HourglassPreferences.getInstance().getTimeFormatString());
+                result, gp().getTimeFormatString());
 
         de.getTextField().addKeyListener(getSpinnerKeyAdapter());
         de.getTextField().addMouseListener(getEditModeMouseListener());
@@ -468,8 +472,8 @@ public class TimeSpanPlate extends JPanel {
             _popupMenu = new JPopupMenu();
             _popupMenu.add(new AbstractAction() {
                 {
-                    putValue(NAME, "Edit");
-                    putValue(MNEMONIC_KEY, new Integer('e'));
+                    putValue(NAME, gu().getString(Strings.MENU_EDIT));
+                    putValue(MNEMONIC_KEY, gu().getMnemonicAsInt(Strings.MENU_EDIT));
                 }
 
                 public void actionPerformed(ActionEvent ae) {
@@ -479,8 +483,8 @@ public class TimeSpanPlate extends JPanel {
 
             _popupMenu.add(new AbstractAction() {
                 {
-                    putValue(NAME, "Delete");
-                    putValue(MNEMONIC_KEY, new Integer('d'));
+                    putValue(NAME, gu().getString(Strings.DELETE));
+                    putValue(MNEMONIC_KEY, gu().getMnemonicAsInt(Strings.DELETE));
                 }
 
                 public void actionPerformed(ActionEvent ae) {
@@ -510,8 +514,9 @@ public class TimeSpanPlate extends JPanel {
 
             _editModePopupMenu.add(new AbstractAction() {
                 {
-                    putValue(NAME, "Save Changes");
-                    putValue(MNEMONIC_KEY, new Integer('s'));
+                    putValue(NAME, gu().getString(Strings.SAVE_CHANGES));
+                    putValue(MNEMONIC_KEY,
+			gu().getMnemonicAsInt(Strings.SAVE_CHANGES));
                 }
 
                 public void actionPerformed(ActionEvent ae) {
@@ -521,8 +526,9 @@ public class TimeSpanPlate extends JPanel {
 
             _editModePopupMenu.add(new AbstractAction() {
                 {
-                    putValue(NAME, "Discard Changes");
-                    putValue(MNEMONIC_KEY, new Integer('c'));
+                    putValue(NAME, gu().getString(Strings.DISCARD_CHANGES));
+                    putValue(MNEMONIC_KEY,
+			gu().getMnemonicAsInt(Strings.DISCARD_CHANGES));
                 }
 
                 public void actionPerformed(ActionEvent ae) {
@@ -532,8 +538,8 @@ public class TimeSpanPlate extends JPanel {
 
             _editModePopupMenu.add(new AbstractAction() {
                 {
-                    putValue(NAME, "Delete");
-                    putValue(MNEMONIC_KEY, new Integer('d'));
+                    putValue(NAME, gu().getString(Strings.DELETE));
+                    putValue(MNEMONIC_KEY, gu().getMnemonicAsInt(Strings.DELETE));
                 }
 
                 public void actionPerformed(ActionEvent ae) {
@@ -604,6 +610,14 @@ public class TimeSpanPlate extends JPanel {
     private DateFormat getTimeFormat() {
         return _activityPanel.getTimeFormat();
     }
+
+  private static Utilities gu() {
+	  return Utilities.getInstance();
+  }
+
+  private static HourglassPreferences gp() {
+	  return HourglassPreferences.getInstance();
+  }
 
 
     private Logger _logger;

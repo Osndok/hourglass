@@ -1,6 +1,7 @@
 /*
  * Hourglass - a time tracking utility.
  * Copyright (C) 2003 Michael K. Grant <mike@acm.jhu.edu>
+ * Copyright (C) 2009 Eric Lavarde <ewl@users.sourceforge.net>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -79,33 +80,37 @@ public class DetailPanel extends JPanel implements ClientStateListener,
 
 		inner.add(new JSeparator(), c_sep.clone());
 
-		inner.add(new JLabel("Project:"), c_lbl.clone());
-		inner.add(new JLabel("This"), c_mid.clone());
-		inner.add(new JLabel("All"), c_end.clone());
+		inner.add(getLabel(Strings.PROJECT_COLON), c_lbl.clone());
+		inner.add(getLabel(Strings.THIS), c_mid.clone());
+		inner.add(getLabel(Strings.ALL), c_end.clone());
 
 		inner.add(new JSeparator(), c_sep.clone());
 
-		inner.add(new JLabel("Total:"), c_lbl.clone());
+		inner.add(getLabel(Strings.TOTAL_COLON), c_lbl.clone());
 		inner.add(getTimeLabel(TOTAL, THIS), c_mid.clone());
 		inner.add(getTimeLabel(TOTAL, ALL), c_end.clone());
 
-		inner.add(new JLabel("Today:"), c_lbl.clone());
+		inner.add(getLabel(Strings.TODAY_COLON), c_lbl.clone());
 		inner.add(getTimeLabel(TODAY, THIS), c_mid.clone());
 		inner.add(getTimeLabel(TODAY, ALL), c_end.clone());
 
-		inner.add(new JLabel("This Week:"), c_lbl.clone());
+		inner.add(getLabel(Strings.THIS_WEEK_COLON), c_lbl.clone());
 		inner.add(getTimeLabel(WEEK, THIS), c_mid.clone());
 		inner.add(getTimeLabel(WEEK, ALL), c_end.clone());
 
-		inner.add(new JLabel("This Month:"), c_lbl.clone());
+		inner.add(getLabel(Strings.THIS_MONTH_COLON), c_lbl.clone());
 		inner.add(getTimeLabel(MONTH, THIS), c_mid.clone());
 		inner.add(getTimeLabel(MONTH, ALL), c_end.clone());
 
-		inner.add(new JLabel("This Year:"), c_lbl.clone());
+		inner.add(getLabel(Strings.THIS_YEAR_COLON), c_lbl.clone());
 		inner.add(getTimeLabel(YEAR, THIS), c_mid.clone());
 		inner.add(getTimeLabel(YEAR, ALL), c_end.clone());
 
 		add(inner, BorderLayout.CENTER);
+	}
+
+	private JLabel getLabel(String key) {
+		return new JLabel(gu().getString(key));
 	}
 
 	private JLabel getTimeLabel(int time, int type) {
@@ -137,8 +142,8 @@ public class DetailPanel extends JPanel implements ClientStateListener,
 	public void projectGroupChanged(ProjectGroup projects) {
 		updateStatistics();
 
-		// This is a little bit ugly, but mostly harmless. If we don't do this,
-		// we
+		// This is a little bit ugly, but mostly harmless.
+		// If we don't do this, we
 		// won't be listening to new projects as they're loaded.
 		projects.addProjectGroupListener(this);
 	}
@@ -210,8 +215,8 @@ public class DetailPanel extends JPanel implements ClientStateListener,
 
 		// update the totals for all projects
 
-		// for the "all" total, use the zero-time (1970), as we really can't
-		// have project data before that
+		// for the "all" total, use the zero-time (1970), as we really
+		// can't have project data before that
 		Date all = new Date(0);
 		long total = getAllProjectTimeSince(all, now);
 		getTimeLabel(TOTAL, ALL).setText(formatTime(getTimePlusCurrent(total)));
@@ -271,6 +276,10 @@ public class DetailPanel extends JPanel implements ClientStateListener,
 	private String formatTime(long ms) {
 		return DateUtilities.HOUR_MINUTE_FORMATTER.formatTime(ms);
 	}
+
+  private static Utilities gu() {
+	  return Utilities.getInstance();
+  }
 
 	private JLabel[][] _labels;
 

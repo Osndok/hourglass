@@ -1,6 +1,7 @@
 /*
  * Hourglass - a time tracking utility.
  * Copyright (C) 2003 Michael K. Grant <mike@acm.jhu.edu>
+ * Copyright (C) 2009 Eric Lavarde <ewl@users.sourceforge.net>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,6 +31,8 @@ import net.sourceforge.hourglass.framework.Project;
 import net.sourceforge.hourglass.framework.ProjectGroup;
 import net.sourceforge.hourglass.framework.ProjectGroupListener;
 import net.sourceforge.hourglass.framework.TimeSpan;
+import net.sourceforge.hourglass.framework.Utilities;
+import net.sourceforge.hourglass.swingui.Strings;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -50,8 +53,10 @@ public class LocalProjectGroup implements ProjectGroup {
         _projectMap = new HashMap();
         _parentMap = new HashMap();
         _listeners = new LinkedList();
-        _rootProject = (MutableProject) new LocalProjectFactory().createProject(this, "<ROOT>",
-                "Root Project.");
+        _rootProject = (MutableProject) new
+		LocalProjectFactory().createProject(this,
+			gu().getString(Strings.ROOT_NAME),
+			gu().getString(Strings.ROOT_DESCRIPTION));
         _attributes = new HashMap();
     }
 
@@ -218,6 +223,10 @@ public class LocalProjectGroup implements ProjectGroup {
         }
         return _logger;
     }
+
+  private static Utilities gu() {
+	  return Utilities.getInstance();
+  }
 
     public String getAttribute(Project project, String domain, String name) {
         Map m = retrieveAttributeMap(project, domain);

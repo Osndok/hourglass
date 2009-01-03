@@ -1,6 +1,7 @@
 /*
  * Hourglass - a time tracking utility.
  * Copyright (C) 2003 Michael K. Grant <mike@acm.jhu.edu>
+ * Copyright (C) 2009 Eric Lavarde <ewl@users.sourceforge.net>
  *
  * This program is free software; you can redistribute it and/or modify 
  * it under the terms of the GNU General Public License as published by
@@ -61,8 +62,8 @@ public class TimecardTreeTableModel extends AbstractTreeTableModel {
                                 DateUtilities.TimeFormatter timeFormatter) {
 
     super(TREE_ROOT);
-    // TODO [MGT, 25 Oct 2003]: externalize date formats (probably into resource bundle)
-    _dateFormat = new SimpleDateFormat("EEE\nMM/dd"); 
+    _dateFormat = new SimpleDateFormat(
+		gu().getString(Strings.TIMECARD_COLUMN_DATE_FORMAT)); 
     
     _calendar = Calendar.getInstance();
     reinitialize(projectGroup, startDate, endDate, timeFormatter);
@@ -146,7 +147,7 @@ public Class getColumnClass(int col) {
     // column header.
   	
   	if (isProjectColumn(col)) {
-  		return Utilities.getInstance().getString(Strings.PROJECT);
+  		return gu().getString(Strings.PROJECT);
   	}
   	else if (isSumColumn(col)) {
   		return "Total";
@@ -214,7 +215,7 @@ public Class getColumnClass(int col) {
       // If the node's first child is visible, it's expanded,
       // otherwise it's collapsed.
       Project firstChild = (Project) getChild(project, 0);
-      Object[] arrayPath = Utilities.getInstance().createPathTo
+      Object[] arrayPath = gu().createPathTo
          (firstChild, _projectGroup).toArray();
       // We use a special root object, not the root project.
       arrayPath[0] = TREE_ROOT;
@@ -222,7 +223,11 @@ public Class getColumnClass(int col) {
       return !_tree.isVisible(tp);
     }
   }
-  
+
+  private static Utilities gu() {
+	  return Utilities.getInstance();
+  }
+
   public static final Object TREE_ROOT = "TREE_ROOT";
   
   private Project _root;

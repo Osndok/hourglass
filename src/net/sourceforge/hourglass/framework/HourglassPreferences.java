@@ -1,6 +1,7 @@
 /*
  * Hourglass - a time tracking utility.
  * Copyright (C) 2003 Michael K. Grant <mike@acm.jhu.edu>
+ * Copyright (C) 2009 Eric Lavarde <ewl@users.sourceforge.net>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -42,9 +43,6 @@ import org.apache.log4j.Logger;
 
 /**
  * Encapsulates setting and persisting preferences.
- * 
- * TODO [mkg 8/15/2003]: Remove custom accessors where possible.
- * TODO [mkg 8/15/2003]: Centralize default values.
  */
 public class HourglassPreferences {
 

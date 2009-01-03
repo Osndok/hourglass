@@ -36,8 +36,7 @@ import java.io.OutputStream;
 import java.text.DateFormat;
 import java.util.Comparator;
 
-import net.sourceforge.hourglass.framework.HourglassPreferences;
-import net.sourceforge.hourglass.framework.Prefs;
+import net.sourceforge.hourglass.BaseUtilities;
 
 import org.apache.log4j.Logger;
 
@@ -46,10 +45,10 @@ import org.apache.log4j.Logger;
  *
  * @author Mike Grant
  */
-public class Utilities {
+public class Utilities extends BaseUtilities {
 
 
-  private Utilities() { }
+  private Utilities() { super(); }
 
 
   /**
@@ -130,27 +129,6 @@ public class Utilities {
   }
 
 
-  /**
-   * Copies a file.
-   */
-  public static void copy(File source, File target) throws IOException {
-    FileInputStream fin = new FileInputStream(source);
-    FileOutputStream fout = new FileOutputStream(target);
-    copy(fin, fout);
-    fin.close();
-    fout.close();
-  }
-  
-
-  public static void copy(InputStream in, OutputStream out) throws IOException {
-    byte[] buf = new byte[2048];
-    int read = 0;
-  
-    while ((read = in.read(buf)) > 0) {
-      out.write(buf, 0, read);
-    }
-  }
-  
   public File getHourglassDir() {
   	if (m_hourglassDir == null) {
 		m_hourglassDir = new File(gp().getPath(Prefs.HOURGLASS_DIR));
@@ -182,5 +160,3 @@ public class Utilities {
   private static final Logger s_logger = Logger.getLogger(Utilities.class);
 
 }
-
-  
