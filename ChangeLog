@@ -1,6 +1,29 @@
 # SVN Revision $Revision: 1.11 $
 # Last modified on $Date: 2008/12/22 16:46:42 $ by $Author: ewl $
 
+version 0.7.2  (04/01/2009)
+
+CHANGE: the Hourglass directory can now be modified using the property
+        hg.HOURGLASS_DIR, even using other Java properties.
+	See Wiki for details.
+DEVELCHANGE: framework/Utilities and swingui/Utilities are now descendants
+             of the new BaseUtilities class, but the last word is probably
+	     not spoken (I'm not too happy about the result).
+DEVELCHANGE: removed Constants.java and all references and replaced through
+             calls to immutable Preferences.
+DEVELFIX: makes build fit for Gentoo/portage.
+          Closes: https://sourceforge.net/tracker2/?func=detail&atid=540904&aid=2481672&group_id=74405
+DEVELNEW: a new getPath function for preferences, where variables of the type
+          ${var} are replaced by their values.
+FIX: The application is quite completely localized, all strings can now be
+     translated.
+     Closes: http://sourceforge.net/tracker/index.php?func=detail&aid=1197350&group_id=74405&atid=540902
+NEW: English Irish as translation on top of the default English one
+     (especially to cope for different date/times format).
+NEW: preferences can now be modified from the command line using the -D option
+     of Java. The details will be documented in the Wiki.
+NEW: the 12/24 setting is per default the one defined in the language files.
+
 version 0.7.1  (01/01/2009)
 
 FIX: alleviate (unconfirmed) risk of loss of data through backup versioning.
