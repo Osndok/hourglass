@@ -150,7 +150,7 @@ public Class getColumnClass(int col) {
   		return gu().getString(Strings.PROJECT);
   	}
   	else if (isSumColumn(col)) {
-  		return "Total";
+  		return gu().getString(Strings.TOTAL);
   	}
   	else {
   		return _dateFormat.format(getDate(col - 1));
