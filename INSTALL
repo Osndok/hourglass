@@ -33,10 +33,10 @@ Data Storage:
 Project data is stored at $HOME/.hourglass/data.xml by default.
 However, there are two ways to change this:
 
-1.  -Dhg.home=<hg_home>  -  This will change the directory
-2.  -Dhg.archive.name=<archive_name>  -  Uses <archive_name>.xml
-      instead of data.xml
-
+1.  -Dhg.HOURGLASS_DIR=<hourglass_dir>  -  the directory where Hourglass
+    will save its data.
+2.  -Dhg.ARCHIVE_NAME=<archive_name>  -  Uses <archive_name>.xml
+    instead of data.xml
 
 
 ======================================================================
@@ -44,5 +44,6 @@ However, there are two ways to change this:
 ======================================================================
 
 Currently, this is it :)  Email ewl@users.sourceforge.net if you need help
-after reading the information above.
+after reading the information above and the one in the project's Wiki under
+http://hourglass.sf.net/.
 

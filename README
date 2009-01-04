@@ -78,6 +78,8 @@ and run Hourglass.
         Builds a distribution in the dist directory.  dist/hourglass
         is the top-level distribution directory.  
 
+# ant dist-clean
+        Completely cleans the project.
 
 ======================================================================
  Running the Distribution
