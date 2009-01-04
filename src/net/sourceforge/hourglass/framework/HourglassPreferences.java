@@ -151,8 +151,12 @@ public class HourglassPreferences {
 
 
   public String getTimeFormatType() {
-	  // TODO: use TIME_FORMAT_DEFAULT from localized properties
-  	return getString(Prefs.TIME_FORMAT_TYPE);
+	String type = getString(Prefs.TIME_FORMAT_TYPE);
+	if (type == null) { // we use the language's default format
+		return gu().getString(Strings.TIME_FORMAT_DEFAULT);
+	} else {
+		return type;
+	}
   }
   
   public void setTimeFormatType(String timeFormatType) {
@@ -316,6 +320,10 @@ public class HourglassPreferences {
    */
   public interface Listener {
     public void preferenceChanged(String preferenceId);
+  }
+
+  private static Utilities gu() {
+	  return Utilities.getInstance();
   }
 
   private Preferences _prefs;
