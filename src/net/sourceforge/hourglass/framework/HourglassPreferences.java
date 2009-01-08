@@ -25,6 +25,7 @@
  */
 package net.sourceforge.hourglass.framework;
 
+import java.io.File;
 import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -242,8 +243,12 @@ public class HourglassPreferences {
  */
   public String getPath(String preferenceId) {
 	String path = getString(preferenceId);
+	getLogger().debug("getPath - retrieved '" + path + "' for ID = '"
+		+ preferenceId + "'.");
 	if (path == null) return null;
 	int indirect = getInt(Prefs.MAX_INDIRECTIONS); // avoid infinite loops
+	// as long as we find variables in the string, we replace them through
+	// their preference value, or through the corresponding System property.
 	while (indirect >= 0 && path.matches(".*\\$\\{[\\w.]+}.*")) {
 		indirect--; // avoid infinite loops
 		String pref = path.substring(path.indexOf("${")+2,
@@ -256,11 +261,19 @@ public class HourglassPreferences {
 				+ preferenceId + "' = '" + path + "'.");
 			return null;
 		} else {
-			path = path.replaceAll("\\$\\{" + pref + "}", val);
+			getLogger().debug("getPath - All occurences of ${"
+				+ pref + "} will be replaced through '"
+				+ val + "'.");
+			// the replace() construct is a ugly hack to avoid
+			// issues with swallowed backslashes under Windows.
+			path = path.replaceAll("\\$\\{" + pref + "}",
+					val.replace(File.separatorChar,'/')
+				).replace('/',File.separatorChar);
+			getLogger().debug("getPath - Resulting path is '"
+					+ path + "'.");
 		}
-	}
-	getLogger().debug("Preference '" + preferenceId + "' resolved to '"
-		+ path + "'.");
+	} // as long as we find variables in the string
+	getLogger().debug("Preference '" + preferenceId + "' resolved to '" + path + "'.");
 	return path;
   }
 
