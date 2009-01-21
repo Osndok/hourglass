@@ -66,7 +66,7 @@ public class Timer extends Thread {
   /**
    * Removes a listener from this timer.
    */
-  public synchronized void removeTimerLister(TimerListener tl) {
+  public synchronized void removeTimerListener(TimerListener tl) {
     _listeners.remove(tl);
   }
 
