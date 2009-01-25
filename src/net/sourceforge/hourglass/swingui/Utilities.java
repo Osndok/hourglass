@@ -159,13 +159,11 @@ public class Utilities extends BaseUtilities {
 		for (int i = 0; i < actions.length; ++i) {
 			result.add(actions[i]);
 		}
-		try {
-			char mnemonic = getMnemonic(resourceKey);
+		char mnemonic = getMnemonic(resourceKey);
+		if (mnemonic > 0) { // mnemonic of 0 means no mnemonic
 			result.setMnemonic(mnemonic);
-			return result;
-		} catch (MissingResourceException e) {
-			return result;
 		}
+		return result;
 	}
 
 	public int getMnemonicAsInt(String resourceKey) {
@@ -173,9 +171,7 @@ public class Utilities extends BaseUtilities {
 	}
 
 	private char getMnemonic(String resourceKey) {
-		String mnemonicStr = getString(resourceKey + MNEMONIC_RESOURCE_SUFFIX);
-		char mnemonic = mnemonicStr.charAt(0);
-		return mnemonic;
+		return getChar(resourceKey + MNEMONIC_RESOURCE_SUFFIX);
 	}
 
 	public void showError(Component parent, String key, String[] args) {

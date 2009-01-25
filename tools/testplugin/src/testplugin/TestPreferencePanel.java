@@ -55,7 +55,7 @@ class TestPreferencePanel extends PreferencePanel {
 
     public void initializeSettings() {
         // Read any preferences needed to initialize the panel.
-        String value = HourglassPreferences.getInstance().getString("test_default", "Default Value");
+        String value = HourglassPreferences.getInstance().getString("test_default");
         m_tf.setText(value);
     }
 

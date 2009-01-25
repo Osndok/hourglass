@@ -30,6 +30,7 @@ import java.io.IOException;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 import net.sourceforge.hourglass.HourglassTestCase;
+import net.sourceforge.hourglass.swingui.Strings;
 
 /**
  * Unit tests for {@link net.sourceforge.hourglass.framework.LockManager}.

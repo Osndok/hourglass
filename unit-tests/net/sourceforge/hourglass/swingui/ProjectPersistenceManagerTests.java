@@ -125,7 +125,7 @@ public class ProjectPersistenceManagerTests
    */
   public void testGetBackupFileName() {
     assertEquals("/home/mike/tmp.txt~", 
-                 _pm.getBackupFileName("/home/mike/tmp.txt"));
+                 _pm.getBackupFileName("/home/mike/tmp.txt",0));
   }
   
   public void testAttributePersistence() throws Exception {

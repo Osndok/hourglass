@@ -97,6 +97,16 @@ public class BaseUtilities {
 		return MessageFormat.format(unformattedMsg, (Object[]) args);
 	}
 
+	public char getChar(String resourceKey) {
+		String result = null;
+		try {
+			result = m_resources.getString(resourceKey);
+		} catch (MissingResourceException e) {
+			// Allow result to remain null, handled below.
+			getLogger().debug(e);
+		}
+		return result == null ? 0 : result.charAt(0);
+	}
 
 	/**
 	* Copies a file.
