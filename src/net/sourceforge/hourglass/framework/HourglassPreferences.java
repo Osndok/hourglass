@@ -266,7 +266,7 @@ public class HourglassPreferences {
 				+ val + "'.");
 			// the replace() construct is a ugly hack to avoid
 			// issues with swallowed backslashes under Windows.
-			path = path.replaceAll("\\$\\{" + pref + "}",
+			path = path.replaceAll("\\$\\{" + pref + "\\}",
 					val.replace(File.separatorChar,'/')
 				).replace('/',File.separatorChar);
 			getLogger().debug("getPath - Resulting path is '"

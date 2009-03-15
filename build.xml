@@ -26,10 +26,8 @@
   <property name="dir.resources" value="${basedir}/resources" />
   <property name="dir.tools" value="${basedir}/tools" />
   <property name="dir.unit-tests" value="${basedir}/unit-tests" />
-  <property name="dir.acceptance-tests" value="${basedir}/acceptance-tests" />
 
   <property name="unit-test.suite" value="net.sourceforge.hourglass.AllTests" />
-  <property name="acceptance-test.suite" value="net.sourceforge.hourglass.acceptance.gui.AllTests" />
   <property name="test.archive" value="ant-test" />
 
   <path id="classpath.default" />
@@ -48,8 +46,6 @@
   <path id="classpath.compile.tests">
     <pathelement location="${dir.build.classes}" />
     <pathelement location="${jar.junit}" />
-    <pathelement location="${jar.abbot}" />
-    <pathelement location="${jar.jfcunit}" />
     <pathelement location="${jar.regexp}" />
     <path refid="classpath.compile" />
   </path>
@@ -161,10 +157,6 @@
            destdir="${dir.build.testclasses}"
            classpathref="classpath.compile.tests" 
            debug="yes" />
-    <javac srcdir="${dir.acceptance-tests}"
-           destdir="${dir.build.testclasses}"
-           classpathref="classpath.compile.tests" 
-           debug="yes" />
   </target>
   
   <target name="instrument" depends="compile">
@@ -175,11 +167,8 @@
 
 
   <target name="run.all-tests">
-    <!-- TODO [MGT, 25 Oct 2003]: make a suite instead of running separately. -->
     <antcall target="run.unit-tests" />
-    <antcall target="run.acceptance-tests" />
   </target>
-
 
   <target name="run.unit-tests">
     <antcall target="run.tests">
@@ -187,12 +176,6 @@
     </antcall>
   </target>
   
-  <target name="run.acceptance-tests">
-    <antcall target="run.tests">
-      <param name="test.suite" value="${acceptance-test.suite}" />
-    </antcall>
-  </target>
-
   <target name="run.tests" depends="compile, compile.tests">
     <junit printsummary="yes" haltonfailure="no" fork="yes">
       <classpath refid="classpath.run.tests" />

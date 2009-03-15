@@ -34,6 +34,8 @@ import net.sourceforge.hourglass.framework.Prefs;
 import net.sourceforge.hourglass.framework.Utilities;
 import net.sourceforge.hourglass.plugins.PluginManager;
 
+import org.apache.log4j.Appender;
+import org.apache.log4j.FileAppender;
 import org.apache.log4j.Logger;
 
 /**
@@ -47,8 +49,8 @@ public class Main {
    * Runs the application.
    */
   public void run() {
-    bootstrapGlobalPreferences();
     ensureHourglassDirExists();
+    bootstrapGlobalPreferences();
     try {
       ProjectPersistenceManager persistenceManager = new ProjectPersistenceManager(
                                                            gp().getPath(Prefs.ARCHIVE_NAME));
@@ -67,7 +69,8 @@ public class Main {
   }
 
 
-  /**
+
+/**
    * Bootstraps any preferences that are globally needed.
    */
   private void bootstrapGlobalPreferences() {
@@ -87,7 +90,6 @@ public class Main {
       dir.mkdir();
     }
   }
-
 
   private Logger getLogger() {
     if (_logger == null) {
