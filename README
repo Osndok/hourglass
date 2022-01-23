@@ -1,5 +1,19 @@
-# CVS Revision $Revision: 1.5 $
-# Last modified on $Date: 2008/10/25 15:22:52 $ by $Author: ewl $
+
+This is a fork and a mirror of a stale sourceforge project used to
+track time usage.
+
+Most of the branches of this repo are modified from the original
+version of this project. These modifications include:
+
+* Some future/planned work that should be detailed here as it is completed.
+
+The source code for the original project (unmodified) can be found
+on the `upstream` branch, or via the below sourceforge link using
+subversion (`svn`).
+
+For more information (including screenshots), see:
+* https://alternativeto.net/software/hourglass/about/
+* https://sourceforge.net/projects/hourglass/
 
 ======================================================================
  Where to Get More Information
