@@ -57,7 +57,8 @@ import net.sourceforge.hourglass.framework.HourglassPreferences;
 import net.sourceforge.hourglass.framework.TimeSpan;
 import net.sourceforge.hourglass.framework.TimeSpanOverlapException;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * A swing component to display and edit a TimeSpan.
@@ -367,9 +368,10 @@ public class TimeSpanPlate extends JPanel {
     }
 
 
-    private Logger getLogger() {
+    private
+    Logger getLogger() {
         if (_logger == null) {
-            _logger = Logger.getLogger(getClass());
+            _logger = LogManager.getLogger(getClass());
         }
         return _logger;
     }

@@ -28,14 +28,11 @@ package net.sourceforge.hourglass.swingui;
 import java.awt.Component;
 import java.awt.Frame;
 import java.net.URL;
-import java.text.MessageFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.MissingResourceException;
-import java.util.ResourceBundle;
 
 import javax.swing.Action;
 import javax.swing.Icon;
@@ -51,7 +48,8 @@ import net.sourceforge.hourglass.framework.Project;
 import net.sourceforge.hourglass.framework.ProjectGroup;
 import net.sourceforge.hourglass.BaseUtilities;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Utilities for the Swing UI
@@ -203,9 +201,10 @@ public class Utilities extends BaseUtilities {
 		return getString(resourceKey) + ":";
 	}
 
-	private Logger getLogger() {
+	private
+	Logger getLogger() {
 		if (m_logger == null) {
-			m_logger = Logger.getLogger(getClass());
+			m_logger = LogManager.getLogger(getClass());
 		}
 		return m_logger;
 	}

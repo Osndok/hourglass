@@ -39,7 +39,8 @@ import net.sourceforge.hourglass.framework.ProjectGroup;
 import net.sourceforge.hourglass.framework.ProjectGroupListener;
 import net.sourceforge.hourglass.framework.TimeSpan;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * TreeModel for a ProjectGroup.
@@ -105,9 +106,10 @@ public class ProjectGroupTreeModel
   }
   
 
-  public Logger getLogger() {
+  public
+  Logger getLogger() {
     if (_logger == null) {
-      _logger = Logger.getLogger(getClass());
+      _logger = LogManager.getLogger(getClass());
     }
     return _logger;
   }

@@ -68,7 +68,8 @@ import net.sourceforge.hourglass.swingui.Strings;
 import net.sourceforge.hourglass.swingui.Utilities;
 import net.sourceforge.hourglass.swingui.treetable.JTreeTable;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Swing UI for the timecard report.
@@ -365,6 +366,6 @@ public class TimecardReportPanel extends JPanel {
 	  return Utilities.getInstance();
   }
 
-    private static final Logger __logger = Logger.getLogger(TimecardReportPanel.class);
+    private static final Logger __logger = LogManager.getLogger(TimecardReportPanel.class);
 
 }

@@ -28,17 +28,15 @@ package net.sourceforge.hourglass.framework;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.text.DateFormat;
 import java.util.Comparator;
 
 import net.sourceforge.hourglass.BaseUtilities;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-import org.apache.log4j.Logger;
 
 /**
  * Utilities for the Hourglass framework package.
@@ -157,6 +155,6 @@ public class Utilities extends BaseUtilities {
   private File m_hourglassDir;
 
   private static Utilities s_instance;
-  private static final Logger s_logger = Logger.getLogger(Utilities.class);
+  private static final Logger s_logger = LogManager.getLogger(Utilities.class);
 
 }

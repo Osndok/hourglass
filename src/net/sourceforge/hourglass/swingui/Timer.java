@@ -31,7 +31,8 @@ import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 
 /**
@@ -128,9 +129,10 @@ public class Timer extends Thread {
   }
 
 
-  private Logger getLogger() {
+  private
+  Logger getLogger() {
     if (_logger == null) {
-      _logger = Logger.getLogger(getClass());
+      _logger = LogManager.getLogger(getClass());
     }
     return _logger;
   }

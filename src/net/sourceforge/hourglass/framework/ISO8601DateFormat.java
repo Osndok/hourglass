@@ -34,7 +34,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 
 /**
@@ -175,9 +176,10 @@ public class ISO8601DateFormat extends DateFormat {
   }
 
 
-  private Logger getLogger() {
+  private
+  Logger getLogger() {
     if (_logger == null) {
-      _logger = Logger.getLogger(getClass());
+      _logger = LogManager.getLogger(getClass());
     }
     return _logger;
   }

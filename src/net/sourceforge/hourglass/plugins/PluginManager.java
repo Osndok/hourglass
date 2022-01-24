@@ -45,7 +45,8 @@ import net.sourceforge.hourglass.framework.HourglassPreferences;
 import net.sourceforge.hourglass.swingui.Utilities;
 import net.sourceforge.hourglass.swingui.Strings;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * @author Michael K. Grant <mike@acm.jhu.edu>
@@ -53,7 +54,7 @@ import org.apache.log4j.Logger;
 public class PluginManager implements ListModel {
 
     private static PluginManager s_instance = null;
-    private static final Logger s_logger = Logger.getLogger(PluginManager.class);
+    private static final Logger s_logger = LogManager.getLogger(PluginManager.class);
     
     private static final String PLUGIN_PREFS_KEY = "PLUGINS";
     private static final String PLUGIN_JAR_FILE_LOCATION_KEY = "JAR_FILE_LOCATION";

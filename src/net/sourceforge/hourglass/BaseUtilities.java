@@ -37,9 +37,8 @@ import java.util.ResourceBundle;
 
 import net.sourceforge.hourglass.framework.HourglassPreferences;
 import net.sourceforge.hourglass.framework.Prefs;
-import net.sourceforge.hourglass.BaseUtilities;
-
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * BaseUtilities for the Swing UI
@@ -128,9 +127,10 @@ public class BaseUtilities {
 		}
 	}
 
-	private Logger getLogger() {
+	private
+	Logger getLogger() {
 		if (m_logger == null) {
-			m_logger = Logger.getLogger(getClass());
+			m_logger = LogManager.getLogger(getClass());
 		}
 		return m_logger;
 	}

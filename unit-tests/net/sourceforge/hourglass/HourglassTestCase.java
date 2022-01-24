@@ -35,8 +35,10 @@ import net.sourceforge.hourglass.framework.ISO8601DateFormat;
 import net.sourceforge.hourglass.framework.Project;
 import net.sourceforge.hourglass.framework.ProjectGroup;
 
-import org.apache.log4j.Logger;
 import java.util.UUID;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.xml.sax.SAXException;
 
 /**
@@ -73,9 +75,10 @@ public abstract class HourglassTestCase extends TestCase {
   /**
    * Returns the Log4J logger for this test case.
    */
-  protected Logger getLogger() {
+  protected
+  Logger getLogger() {
     if (_logger == null) {
-      _logger = Logger.getLogger(getClass());
+      _logger = LogManager.getLogger(getClass());
     }
     return _logger;
   }

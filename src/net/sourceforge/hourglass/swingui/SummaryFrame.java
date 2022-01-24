@@ -84,7 +84,8 @@ import net.sourceforge.hourglass.framework.TimeSpan;
 import net.sourceforge.hourglass.plugins.PluginManager;
 import net.sourceforge.hourglass.reports.timecard.TimecardReportPanel;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jfree.ui.DateChooserPanel;
 import org.xml.sax.SAXException;
 
@@ -798,9 +799,10 @@ private JPanel getLeftPanel() {
     getPersistenceManager().save(ClientState.getInstance().getProjectGroup());
   }
 
-  private Logger getLogger() {
+  private
+  Logger getLogger() {
     if (_logger == null) {
-      _logger = Logger.getLogger(getClass());
+      _logger = LogManager.getLogger(getClass());
     }
     return _logger;
   }

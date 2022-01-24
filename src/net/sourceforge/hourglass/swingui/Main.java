@@ -34,9 +34,8 @@ import net.sourceforge.hourglass.framework.Prefs;
 import net.sourceforge.hourglass.framework.Utilities;
 import net.sourceforge.hourglass.plugins.PluginManager;
 
-import org.apache.log4j.Appender;
-import org.apache.log4j.FileAppender;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Bootstraps the application.
@@ -91,9 +90,10 @@ public class Main {
     }
   }
 
-  private Logger getLogger() {
+  private
+  Logger getLogger() {
     if (_logger == null) {
-      _logger = Logger.getLogger(getClass());
+      _logger = LogManager.getLogger(getClass());
     }
     return _logger;
   }

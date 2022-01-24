@@ -39,8 +39,9 @@ import net.sourceforge.hourglass.framework.ProjectGroup;
 import net.sourceforge.hourglass.framework.TimeSpan;
 import net.sourceforge.hourglass.framework.TimeSpanOverlapException;
 import net.sourceforge.hourglass.framework.Utilities;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-import org.apache.log4j.Logger;
 import java.util.UUID;
 
 
@@ -274,9 +275,10 @@ public class LocalProject implements MutableProject {
         Collections.sort(_children, Utilities.getInstance().getProjectNameComparator());
     }
 
-    private Logger getLogger() {
+    private
+    Logger getLogger() {
         if (_logger == null) {
-            _logger = Logger.getLogger(getClass());
+            _logger = LogManager.getLogger(getClass());
         }
         return _logger;
     }

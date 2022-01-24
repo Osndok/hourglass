@@ -36,7 +36,8 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.Properties;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jdom.output.XMLOutputter;
 
 
@@ -212,9 +213,10 @@ public class ProjectWriter {
   }
 
 
-  private Logger getLogger() {
+  private
+  Logger getLogger() {
     if (_logger == null) {
-      _logger = Logger.getLogger(getClass());
+      _logger = LogManager.getLogger(getClass());
     }
     return _logger;
   }

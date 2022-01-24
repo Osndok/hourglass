@@ -36,7 +36,8 @@ import java.util.zip.ZipEntry;
 
 import net.sourceforge.hourglass.framework.Utilities;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  *
@@ -44,7 +45,7 @@ import org.apache.log4j.Logger;
  */
 public class PluginClassLoader extends ClassLoader {
     
-    private static final Logger s_logger = Logger.getLogger(PluginClassLoader.class);
+    private static final Logger s_logger = LogManager.getLogger(PluginClassLoader.class);
     private static final String CLASS_SUFFIX = ".class";
     private JarFile m_jarFile;
     private JarFile[] m_supportingLibraries;

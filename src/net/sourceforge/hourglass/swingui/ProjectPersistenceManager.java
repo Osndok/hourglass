@@ -42,7 +42,8 @@ import net.sourceforge.hourglass.framework.ProjectParser;
 import net.sourceforge.hourglass.framework.ProjectWriter;
 import net.sourceforge.hourglass.framework.local.LocalProjectFactory;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.xml.sax.SAXException;
 
 
@@ -264,9 +265,10 @@ public class ProjectPersistenceManager
   }
 
 
-  private Logger getLogger() {
+  private
+  Logger getLogger() {
     if (_logger == null) {
-      _logger = Logger.getLogger(getClass());
+      _logger = LogManager.getLogger(getClass());
     }
     return _logger;
   }
