@@ -5,7 +5,10 @@ track time usage.
 Most of the branches of this repo are modified from the original
 version of this project. These modifications include:
 
-* Some future/planned work that should be detailed here as it is completed.
+* A Maven pom.xml file is introduced (was using ant)
+* Build dependencies have been updated
+
+There are also several other non-trivial changes planned for the near future.
 
 The source code for the original project (unmodified) can be found
 on the `upstream` branch, or via the below sourceforge link using
