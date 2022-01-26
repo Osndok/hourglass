@@ -28,37 +28,43 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 
-import junit.framework.TestCase;
 import net.sourceforge.hourglass.framework.Utilities;
-
+import org.junit.Assert;
+import org.junit.Ignore;
+import org.junit.Test;
 
 /**
  * @author Mike Grant <mike@acm.jhu.edu>
  */
-public class PluginHandleTest extends TestCase {
-    
-    
+public class PluginHandleTest
+{
     private static final String PLUGIN_NAME = "Test Plugin";
     private static final String JAR_RESOURCE_NAME = "net/sourceforge/hourglass/plugins/testplugin.jar";
     private File m_jarFile;
-    
-    
-    public void setUp() throws Exception {
-        m_jarFile = File.createTempFile("testplugin", ".jar");
-        m_jarFile.deleteOnExit();
+
+    private File getSamplePluginJarFile() throws Exception {
+        if (m_jarFile != null)
+        {
+            return m_jarFile;
+        }
         InputStream jarStream = getClass().getClassLoader().getResourceAsStream(JAR_RESOURCE_NAME);
         if (jarStream == null) {
             throw new IllegalStateException("Could not locate embedded test plugin: "+JAR_RESOURCE_NAME);
         }
+        m_jarFile = File.createTempFile("testplugin", ".jar");
+        m_jarFile.deleteOnExit();
         FileOutputStream outputStream = new FileOutputStream(m_jarFile);
         Utilities.copy(jarStream, outputStream);
         outputStream.close();
         jarStream.close();
+        return m_jarFile;
     }
-    
-    public void testGetPlugin() throws Exception {
-        PluginHandle handle = new PluginHandle(m_jarFile);
+
+    @Test
+    @Ignore("testplugin.jar is not presently build by maven, nor imported as a static resource")
+    public void samplePluginLoads() throws Exception {
+        PluginHandle handle = new PluginHandle(getSamplePluginJarFile());
         Plugin plugin = handle.getPluginInstance();
-        assertEquals(PLUGIN_NAME, plugin.getName());
+        Assert.assertEquals(PLUGIN_NAME, plugin.getName());
     }
 }
