@@ -125,8 +125,15 @@ public class LockManager {
   private String getDataFileName(String archiveName) {
     return archiveName + DATAFILE_EXTENSION;
   }
-  
+
+  /**
+   * TODO - This currently causes ~/.hourglass to be created even when running unit tests, which seems like bad form.
+   */
   private File getHourglassDir() {
+    if (!_hgDir.isDirectory() && !_hgDir.mkdir())
+    {
+      throw new RuntimeException("Unable to create .hourglass directory: "+_hgDir);
+    }
   	return _hgDir;
   }
   

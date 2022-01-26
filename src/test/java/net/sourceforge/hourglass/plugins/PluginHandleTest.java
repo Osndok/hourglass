@@ -47,6 +47,9 @@ public class PluginHandleTest extends TestCase {
         m_jarFile = File.createTempFile("testplugin", ".jar");
         m_jarFile.deleteOnExit();
         InputStream jarStream = getClass().getClassLoader().getResourceAsStream(JAR_RESOURCE_NAME);
+        if (jarStream == null) {
+            throw new IllegalStateException("Could not locate embedded test plugin: "+JAR_RESOURCE_NAME);
+        }
         FileOutputStream outputStream = new FileOutputStream(m_jarFile);
         Utilities.copy(jarStream, outputStream);
         outputStream.close();
