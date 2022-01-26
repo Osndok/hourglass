@@ -799,12 +799,10 @@ private JPanel getLeftPanel() {
     getPersistenceManager().save(ClientState.getInstance().getProjectGroup());
   }
 
+  @Deprecated
   private
   Logger getLogger() {
-    if (_logger == null) {
-      _logger = LogManager.getLogger(getClass());
-    }
-    return _logger;
+    return log;
   }
 
 
@@ -867,47 +865,30 @@ private JPanel getLeftPanel() {
   }
 
 
-  private void rolloverToNextDay() {
-    /*
-     * PLEASE REFACTOR ME
-     */
-    Date now = new Date();
-    Calendar cal = new GregorianCalendar();
+  private void rolloverToNextDay()
+  {
+    var now = new Date();
+    var cal = new GregorianCalendar();
     cal.setTime(now);
 
     /*
-     * Roll back the date by 1.
-     */ 
-    cal.add(Calendar.DATE, -1);
-
-    /*
-     * Set clock to 11:59:59.999
-     *
-     * Actually, I'm not sure if this is really what we want, because
-     * certain days have fewer seconds than others... leap seconds, I
-     * think.  Not sure that Java even recognizes these.
-     *
-     * Someone with a better knowledge of dates needs to think about
-     * this.  For now, I'll take my chances.
+     * Set clock to 11:59:59.999 of the previous day
      */
-    cal.set(Calendar.HOUR_OF_DAY, 23);
-    cal.set(Calendar.MINUTE, 59);
-    cal.set(Calendar.SECOND, 59);
-    cal.set(Calendar.MILLISECOND, 999);
+    cal.set(Calendar.HOUR_OF_DAY, 0);
+    cal.set(Calendar.MINUTE, 0);
+    cal.set(Calendar.SECOND, 0);
+    cal.set(Calendar.MILLISECOND, 0);
+    cal.add(Calendar.MILLISECOND, -1);
 
-    getLogger().debug("Stopping time span at: " + cal.getTime());
+    log.debug("Rollover: stopping time span at: " + cal.getTime());
 
-    /**
-     * Stop the timer at 11:59 on the previous date.
-     */
+    // Stop the timer at 11:59 on the previous date.
     getClientState().stopCurrentTimeSpan(cal.getTime());
 
-    /*
-     * Roll forward 1 ms (0:00 next day).
-     */
+    // Roll forward 1 ms (0:00 next day)
     cal.add(Calendar.MILLISECOND, 1);
 
-    getLogger().debug("Starting time span at: " + cal.getTime());
+    log.debug("Rollover: resuming time span at: " + cal.getTime());
 
 
     /*
@@ -1092,7 +1073,7 @@ private JPanel getLeftPanel() {
   private Action _timecardReportAction;
   private Action _saveNowAction;
 
-  private Logger _logger;
+  private final Logger log = LogManager.getLogger(getClass());;
 
   private Icon _iconClock;
   private Icon _iconClockGo;
@@ -1103,6 +1084,6 @@ private JPanel getLeftPanel() {
 
   private PreferencesDialog _preferencesDialog;
   
-  private static String DETAIL_PANEL_KEY = "DETAIL_PANEL_KEY";
-  private static String CALENDAR_PANEL_KEY = "CALENDAR_PANEL_KEY";
+  private static final String DETAIL_PANEL_KEY = "DETAIL_PANEL_KEY";
+  private static final String CALENDAR_PANEL_KEY = "CALENDAR_PANEL_KEY";
 }
