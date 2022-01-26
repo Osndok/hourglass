@@ -114,7 +114,7 @@ public class LocalProjectGroup implements ProjectGroup {
         return (Project) _projectMap.get(id);
     }
 
-    public Collection getProjects() {
+    public Collection<Project> getProjects() {
         return _projectMap.values();
     }
 
@@ -306,10 +306,10 @@ public class LocalProjectGroup implements ProjectGroup {
     }
 
     private Logger _logger;
-    private Map _projectMap;
+    private final Map<UUID, Project> _projectMap;
     private Map _parentMap;
     /** Map of Project -> domain -> attr_name -> value */
     private Map _attributes;
-    private List _listeners;
+    private final List<ProjectGroupListener> _listeners;
     private MutableProject _rootProject;
 }

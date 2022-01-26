@@ -29,6 +29,7 @@ import java.util.Date;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
+import net.sourceforge.hourglass.TestUtilities;
 import net.sourceforge.hourglass.framework.MutableProject;
 import net.sourceforge.hourglass.framework.Project;
 import net.sourceforge.hourglass.framework.ProjectFactory;
@@ -63,12 +64,14 @@ public class LocalProjectTests extends ProjectTests {
         _project = (LocalProject) getProjectFactory().createProject(_projectGroup);
         initializeOverlapData();
         addTimeSpans(_project);
+        TestUtilities.getInstance().clearCaches();
         initializeHierProjects();
     }
 
     public void initializeHierProjects() throws Exception {
         hierProjects = new LocalProject[5];
         ProjectGroup pg = getSampleDataHier();
+
         hierProjects[0] = (LocalProject) pg.getProject(UUID.fromString(
                 "66a04623-056e-11d7-b289-e0cd170f00c2"));
         hierProjects[1] = (LocalProject) pg.getProject(UUID.fromString(

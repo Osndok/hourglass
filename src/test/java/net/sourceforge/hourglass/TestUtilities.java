@@ -29,6 +29,7 @@ import net.sourceforge.hourglass.framework.ProjectParser;
 
 import net.sourceforge.hourglass.framework.local.LocalProjectFactory;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -69,7 +70,14 @@ public class TestUtilities {
    * Returns an InputStream for resName.
    */
   private InputStream getSampleStream(String resName) {
-    return getClass().getClassLoader().getResourceAsStream(resName);
+    var stream = getClass().getClassLoader().getResourceAsStream(resName);
+
+    if (stream == null)
+    {
+      throw new IllegalStateException("sample data not found: "+resName);
+    }
+
+    return stream;
   }
 
 
@@ -133,6 +141,10 @@ public class TestUtilities {
     return parser.parse(getSampleStreamHier());
   }
 
+  public void clearCaches() {
+    _sampleData = null;
+    _sampleDataHier = null;
+  }
 
   private static TestUtilities __instance;
   

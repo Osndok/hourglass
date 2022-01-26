@@ -84,7 +84,7 @@ public interface ProjectGroup {
   /**
    * Return a Collection of all the projects.
    */
-  Collection getProjects();
+  Collection<Project> getProjects();
 
 
   /**
