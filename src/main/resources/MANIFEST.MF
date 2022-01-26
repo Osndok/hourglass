@@ -1,2 +1,0 @@
-Main-Class: net.sourceforge.hourglass.swingui.Main
-Class-Path: log4j.jar jdom.jar jcommon.jar
