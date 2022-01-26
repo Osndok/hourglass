@@ -44,6 +44,12 @@
     </xs:complexType>
   </xs:element>
 
+  <xs:element name="time">
+    <xs:complexType>
+      <xs:attribute name="start" type="xs:dateTime" use="required" />
+    </xs:complexType>
+  </xs:element>
+
   <xs:element name="attribute">
     <xs:complexType>
       <xs:attribute name="domain" type="xs:string" use="required" />
@@ -52,7 +58,6 @@
     </xs:complexType>
   </xs:element>
 
-
   <xs:element name="description" type="xs:token" />
 
   <xs:element name="project">
@@ -60,6 +65,7 @@
       <xs:sequence>
         <xs:element ref="description" minOccurs="0" maxOccurs="1" />
         <xs:element ref="timespan" minOccurs="0" maxOccurs="unbounded" />
+        <xs:element ref="time" minOccurs="0" maxOccurs="1" />
         <xs:element ref="attribute" minOccurs="0" maxOccurs="unbounded" />
       </xs:sequence>
       <xs:attribute name="name" type="xs:string" use="required" />
