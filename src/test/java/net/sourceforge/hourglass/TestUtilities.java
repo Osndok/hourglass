@@ -96,10 +96,7 @@ public class TestUtilities {
    * Uses LocalProjectFactory to create projects.
    */
   public ProjectGroup getSampleData() throws IOException, SAXException {
-    if (_sampleData == null) {
-      _sampleData = createNewSampleData();
-    }
-    return _sampleData;
+    return createNewSampleData();
   }
 
 
@@ -111,10 +108,7 @@ public class TestUtilities {
   public ProjectGroup getSampleDataHier() 
     throws IOException, SAXException {
 
-    if (_sampleDataHier == null) {
-      _sampleDataHier = createNewSampleDataHier();
-    }
-    return _sampleDataHier;
+    return createNewSampleDataHier();
   }
 
 
@@ -141,15 +135,7 @@ public class TestUtilities {
     return parser.parse(getSampleStreamHier());
   }
 
-  public void clearCaches() {
-    _sampleData = null;
-    _sampleDataHier = null;
-  }
-
   private static TestUtilities __instance;
-  
-  private ProjectGroup _sampleData;
-  private ProjectGroup _sampleDataHier;
 
   public static final String XML_TEST_RESOURCE =
     "net/sourceforge/hourglass/framework/sample.xml";

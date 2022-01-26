@@ -64,7 +64,6 @@ public class LocalProjectTests extends ProjectTests {
         _project = (LocalProject) getProjectFactory().createProject(_projectGroup);
         initializeOverlapData();
         addTimeSpans(_project);
-        TestUtilities.getInstance().clearCaches();
         initializeHierProjects();
     }
 

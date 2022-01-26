@@ -52,6 +52,7 @@ public class TimecardTreeTableModelTests extends HourglassTestCase {
 	}
 	
 	public void testSummaryRow() {
+		System.err.println(m_model.toString());
 		assertEquals(2, m_model.getChildCount(TimecardTreeTableModel.TREE_ROOT));
 		assertEquals("Project 1",
 				((Project) m_model.getChild(TimecardTreeTableModel.TREE_ROOT, 0)).getName());
