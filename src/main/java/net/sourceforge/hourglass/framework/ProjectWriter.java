@@ -167,9 +167,9 @@ public class ProjectWriter {
     _writer.print(_xmlOutputter.escapeElementEntities(p.getDescription()));
     _writer.println("</description>");
 
-    Iterator i = p.getTimeSpans().iterator();
-    while (i.hasNext()) {
-      writeTimeSpan(_writer, (TimeSpan) i.next());
+    for (final TimeSpan o : p.getTimeSpans())
+    {
+      writeTimeSpan(_writer, o);
     }
 
     writeAttributes(_writer, p);

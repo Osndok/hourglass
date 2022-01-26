@@ -25,13 +25,7 @@
  */
 package net.sourceforge.hourglass.framework.local;
 
-import net.sourceforge.hourglass.framework.IllegalParentException;
-import net.sourceforge.hourglass.framework.MutableProject;
-import net.sourceforge.hourglass.framework.Project;
-import net.sourceforge.hourglass.framework.ProjectGroup;
-import net.sourceforge.hourglass.framework.ProjectGroupListener;
-import net.sourceforge.hourglass.framework.TimeSpan;
-import net.sourceforge.hourglass.framework.Utilities;
+import net.sourceforge.hourglass.framework.*;
 import net.sourceforge.hourglass.swingui.Strings;
 import java.util.Collection;
 import java.util.Collections;
@@ -52,15 +46,20 @@ import java.util.UUID;
  */
 public class LocalProjectGroup implements ProjectGroup {
 
+    private final Logger log = LogManager.getLogger(getClass());;
+    private final Map<UUID, Project> _projectMap = new HashMap<>();
+    private final Map<Project,Project> _parentMap = new HashMap<>();
+    /** Map of Project -> domain -> attr_name -> value */
+    private final Map<Project, ProjectMap> _attributes = new HashMap<>();
+    private final List<ProjectGroupListener> _listeners = new LinkedList<>();
+
+    private final MutableProject _rootProject;
+
     public LocalProjectGroup() {
-        _projectMap = new HashMap();
-        _parentMap = new HashMap();
-        _listeners = new LinkedList();
         _rootProject = (MutableProject) new
 		LocalProjectFactory().createProject(this,
 			gu().getString(Strings.ROOT_NAME),
 			gu().getString(Strings.ROOT_DESCRIPTION));
-        _attributes = new HashMap();
     }
 
     public void addProject(Project p, Project parent) {
@@ -75,7 +74,7 @@ public class LocalProjectGroup implements ProjectGroup {
     }
 
     public void addProject(Project p, UUID parentId) {
-        Project parent = (Project) _projectMap.get(parentId);
+        var parent = _projectMap.get(parentId);
         if (parentId != null && parent == null) {
             getLogger().error("No parent with UUID " + parentId);
         }
@@ -91,15 +90,14 @@ public class LocalProjectGroup implements ProjectGroup {
          * Recursively remove child projects. Use a copy of the collection to
          * avoid concurrent modification problems.
          */
-        List copy = new LinkedList(p.getChildren());
-        Iterator i = copy.iterator();
-        while (i.hasNext()) {
-            Project eachChild = (Project) i.next();
+        var copy = new LinkedList<>(p.getChildren());
+        for (final Project eachChild : copy)
+        {
             removeProject(eachChild);
         }
         boolean wasRemoved = (_projectMap.remove(p.getId()) != null);
         if (wasRemoved) {
-            Project parent = (Project) _parentMap.remove(p);
+            var parent = _parentMap.remove(p);
             ((MutableProject) parent).removeChildProject(p);
             fireProjectsChanged(parent);
         }
@@ -111,7 +109,7 @@ public class LocalProjectGroup implements ProjectGroup {
     }
 
     public Project getProject(UUID id) {
-        return (Project) _projectMap.get(id);
+        return _projectMap.get(id);
     }
 
     public Collection<Project> getProjects() {
@@ -146,7 +144,7 @@ public class LocalProjectGroup implements ProjectGroup {
     }
 
     public Project getParent(Project p) {
-        return (Project) _parentMap.get(p);
+        return _parentMap.get(p);
     }
 
     public void addProjectGroupListener(ProjectGroupListener l) {
@@ -199,9 +197,8 @@ public class LocalProjectGroup implements ProjectGroup {
      *          the project whose attributes have changed.
      */
     protected void fireProjectAttributesChanged(Project p) {
-        Iterator i = _listeners.iterator();
-        while (i.hasNext()) {
-            ProjectGroupListener l = (ProjectGroupListener) i.next();
+        for (final ProjectGroupListener l : _listeners)
+        {
             l.projectAttributesChanged(p);
         }
     }
@@ -213,19 +210,16 @@ public class LocalProjectGroup implements ProjectGroup {
      *          the parent project under which the change occurred.
      */
     protected void fireProjectsChanged(Project parent) {
-        Iterator i = _listeners.iterator();
-        while (i.hasNext()) {
-            ProjectGroupListener l = (ProjectGroupListener) i.next();
+        for (final ProjectGroupListener l : _listeners)
+        {
             l.projectsChanged(parent);
         }
     }
 
+    @Deprecated
     private
     Logger getLogger() {
-        if (_logger == null) {
-            _logger = LogManager.getLogger(getClass());
-        }
-        return _logger;
+        return log;
     }
 
   private static Utilities gu() {
@@ -233,18 +227,17 @@ public class LocalProjectGroup implements ProjectGroup {
   }
 
     public String getAttribute(Project project, String domain, String name) {
-        Map m = retrieveAttributeMap(project, domain);
+        var m = retrieveAttributeMap(project, domain);
         if (m == null) {
             return null;
         }
-        else {
-            return (String) m.get(name);
-        }
+
+        return m.get(name);
     }
 
     public boolean removeAttribute(Project project, String domain, String name) {
         
-        Map attributeMap = createOrRetrieveAttributeMap(project, domain);
+        var attributeMap = createOrRetrieveAttributeMap(project, domain);
         boolean removed = (attributeMap.remove(name) != null);
         if (removed) {
             // If the attribute map for this domain is empty, remove it.
@@ -259,57 +252,48 @@ public class LocalProjectGroup implements ProjectGroup {
         createOrRetrieveAttributeMap(project, domain).put(name, value);
     }
 
-    public Iterator getAttributeDomains(Project project) {
-        Map domainMap = (Map) _attributes.get(project);
-        if (domainMap != null) {
-            return domainMap.keySet().iterator();
-        }
-        else {
+    // TODO: Return Collection<String>
+    public
+    Iterator<String> getAttributeDomains(Project project) {
+        var domainMap = _attributes.get(project);
+        if (domainMap == null) {
             return Collections.EMPTY_SET.iterator();
         }
+
+        return domainMap.keySet().iterator();
     }
 
-    public Iterator getAttributeKeys(Project project, String domain) {
-        Map map = retrieveAttributeMap(project, domain);
+    // TODO: Return Collection<String>
+    public
+    Iterator<String> getAttributeKeys(Project project, String domain) {
+        var map = retrieveAttributeMap(project, domain);
         return (map == null) ? Collections.EMPTY_SET.iterator() : map.keySet().iterator();
     }
     
-    private Map retrieveAttributeMap(Project project, String domain) {
-        Map prjMap = (Map) _attributes.get(project);
-        if (prjMap != null) {
-            Map domainMap = (Map) prjMap.get(domain);
-            if (domainMap != null) {
-                return domainMap;
-            }
+    private AttributeMap retrieveAttributeMap(Project project, String domain)
+    {
+        var prjMap = _attributes.get(project);
+        if (prjMap == null)
+        {
+            return null;
         }
-        return null;
+        return prjMap.get(domain);
     }
 
-    private Map createOrRetrieveAttributeMap(Project project, String domain) {
-        Map prjMap = createOrRetrieveProjectMap(project);
-        Map domainMap = createOrRetrieveDomainMap(prjMap, domain);
+    private
+    AttributeMap createOrRetrieveAttributeMap(Project project, String domain) {
+        var prjMap = createOrRetrieveProjectMap(project);
+        var domainMap = createOrRetrieveDomainMap(prjMap, domain);
         return domainMap;
     }
     
-    private Map createOrRetrieveProjectMap(Project project) {
-    	if (!_attributes.containsKey(project)) {
-    		_attributes.put(project, new HashMap());
-    	}
-    	return (Map) _attributes.get(project);
+    private
+    ProjectMap createOrRetrieveProjectMap(Project project) {
+    	return _attributes.computeIfAbsent(project, (p) -> new ProjectMap());
     }
 
-    private Map createOrRetrieveDomainMap(Map source, String domain) {
-        if (!source.containsKey(domain)) {
-            source.put(domain, new HashMap());
-        }
-        return (Map) source.get(domain);
+    private
+    AttributeMap createOrRetrieveDomainMap(ProjectMap source, String domain) {
+        return source.computeIfAbsent(domain, (d) -> new AttributeMap());
     }
-
-    private Logger _logger;
-    private final Map<UUID, Project> _projectMap;
-    private Map _parentMap;
-    /** Map of Project -> domain -> attr_name -> value */
-    private Map _attributes;
-    private final List<ProjectGroupListener> _listeners;
-    private MutableProject _rootProject;
 }

@@ -86,7 +86,7 @@ public interface Project {
    *
    * @return an Set of timespans
    */
-  Set getTimeSpans();
+  Set<TimeSpan> getTimeSpans();
 
 
   /**
@@ -104,7 +104,7 @@ public interface Project {
   /**
    * Returns a read-only list of the child projects.  
    */
-  List getChildren();
+  List<Project> getChildren();
   
   /**
    * Returns the group with which this project is associated.

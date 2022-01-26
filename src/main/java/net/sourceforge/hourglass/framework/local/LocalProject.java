@@ -54,8 +54,8 @@ public class LocalProject implements MutableProject {
 
     public LocalProject(UUID u) {
         _uuid = u;
-        _timespans = new TreeSet();
-        _children = new ArrayList();
+        _timespans = new TreeSet<>();
+        _children = new ArrayList<>();
         _childrenReadOnly = Collections.unmodifiableList(_children);
         _desc = _name = "";
     }
@@ -94,9 +94,8 @@ public class LocalProject implements MutableProject {
      *          the timeSpan with which to check for overlap.
      */
     public void checkForOverlap(TimeSpan timeSpan) {
-        Iterator i = _timespans.iterator();
-        while (i.hasNext()) {
-            TimeSpan curr = (TimeSpan) i.next();
+        for (final TimeSpan curr : _timespans)
+        {
             checkForLeftOverlap(timeSpan, curr, timeSpan);
             checkForLeftOverlap(curr, timeSpan, timeSpan);
             /*
@@ -107,10 +106,11 @@ public class LocalProject implements MutableProject {
              * zero-length duplicates. Perhaps the solution is to disallow
              * zero-length timespans altogether, but that seems too restrictive
              * to me.
-             * 
+             *
              * For now, we'll do the check.
              */
-            if (timeSpan.equals(curr)) {
+            if (timeSpan.equals(curr))
+            {
                 throw new TimeSpanOverlapException(timeSpan, this);
             }
         }
@@ -139,7 +139,7 @@ public class LocalProject implements MutableProject {
      * 
      * @return an Set of timespans
      */
-    public Set getTimeSpans() {
+    public Set<TimeSpan> getTimeSpans() {
         return _timespans;
     }
 
@@ -163,33 +163,35 @@ public class LocalProject implements MutableProject {
         /*
          * NOTE: Look into using headSet and tailSet here.
          */
-        Iterator i = _timespans.iterator();
         long result = 0;
-        while (i.hasNext()) {
-            TimeSpan ts = (TimeSpan) i.next();
+
+        for (final TimeSpan ts : _timespans)
+        {
             /*
              * If d <= end, then this time span makes _some_ contribution.
              */
-            if (rawDate <= ts.getEndDate().getTime()) {
+            if (rawDate <= ts.getEndDate().getTime())
+            {
                 /*
                  * If d >= start, the span makes a partial contribution, equal
                  * to the time between d and the end date.
                  */
-                if (rawDate >= ts.getStartDate().getTime()) {
+                if (rawDate >= ts.getStartDate().getTime())
+                {
                     result += ts.getEndDate().getTime() - rawDate;
                 }
                 /*
                  * Otherwise, the span makes a full contribution.
                  */
-                else {
+                else
+                {
                     result += ts.getLength();
                 }
             }
         }
         if (isRecursive) {
-            Iterator i_child = _children.iterator();
-            while (i_child.hasNext()) {
-                Project eachChild = (Project) i_child.next();
+            for (final Project eachChild : _children)
+            {
                 result += eachChild.getTimeSince(rawDate, isRecursive);
             }
         }
@@ -267,7 +269,7 @@ public class LocalProject implements MutableProject {
         _children.clear();
     }
 
-    public List getChildren() {
+    public List<Project> getChildren() {
         return _childrenReadOnly;
     }
 
@@ -311,12 +313,13 @@ public class LocalProject implements MutableProject {
         return getProjectGroup().getAttributeKeys(this, domain);
     }
 
-    private UUID _uuid;
-    private SortedSet _timespans;
+    private final UUID _uuid;
+    private final SortedSet<TimeSpan> _timespans;
+    private final List<Project> _children;
+    private final List<Project> _childrenReadOnly;
+
     private String _desc;
     private String _name;
-    private List _children;
-    private List _childrenReadOnly;
     private ProjectGroup _projectGroup;
     private Logger _logger;
 }

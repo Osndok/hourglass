@@ -182,13 +182,15 @@ public interface ProjectGroup {
   
   /**
    * Returns all attribute domains for the given project.
+   * @return
    */
-  Iterator getAttributeDomains(Project project);
+  Iterator<String> getAttributeDomains(Project project);
   
   /**
    * Returns all attribute keys for the given project and domain.
+   * @return
    */
-  Iterator getAttributeKeys(Project project, String domain);
+  Iterator<String> getAttributeKeys(Project project, String domain);
 
   /**
    * Represents the lack of a parent project.  
