@@ -56,10 +56,16 @@ public class HourglassPreferences {
     _props = new Properties();
     URL propURL = getClass().getClassLoader().getResource(PREFERENCES_RESOURCE);
     try {
-      _props.load(propURL.openStream());
+        if (propURL == null)
+        {
+            getLogger().warn("properties resource not found: {}", PREFERENCES_RESOURCE);
+        }
+        else
+        {
+            _props.load(propURL.openStream());
+        }
     } catch (java.io.IOException e) {
-	getLogger().error("Preferences couldn't be loaded from '"
-                        + PREFERENCES_RESOURCE + "'.", e);
+	getLogger().error("Preferences couldn't be loaded from '{}'", PREFERENCES_RESOURCE, e);
     }
   }
 
