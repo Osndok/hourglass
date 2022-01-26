@@ -9,8 +9,6 @@
     <version>0.8-SNAPSHOT</version>
 
     <properties>
-        <src.dir>src</src.dir>
-        <test.dir>unit-tests</test.dir>
         <maven.compiler.source>14</maven.compiler.source>
         <maven.compiler.target>14</maven.compiler.target>
     </properties>
@@ -59,16 +57,4 @@
         </dependency>
     </dependencies>
 
-    <build>
-        <sourceDirectory>${src.dir}</sourceDirectory>
-        <testSourceDirectory>${test.dir}</testSourceDirectory>
-    </build>
-    <!--profiles>
-        <profile>
-            <id>development</id>
-            <properties>
-                <src.dir>${project.build.directory}/new-src</src.dir>
-            </properties>
-        </profile>
-    </profiles-->
 </project>
