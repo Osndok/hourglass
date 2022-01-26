@@ -30,7 +30,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 import net.sourceforge.hourglass.framework.HourglassPreferences;
@@ -54,7 +53,6 @@ import org.xml.sax.SAXException;
 public class ClientState implements HourglassPreferences.Listener {
 
   private ClientState() {
-    _listeners = new ArrayList();
     _projectGroup = getProjectFactory().createProjectGroup();
     _timer = new Timer();
     _timer.start();
@@ -103,7 +101,7 @@ public class ClientState implements HourglassPreferences.Listener {
    *
    * @return the current set of projects as a map keyed on ID.
    */
-  public Collection getProjects() {
+  public Collection<Project> getProjects() {
     return getProjectGroup().getProjects();
   }
 
@@ -117,9 +115,9 @@ public class ClientState implements HourglassPreferences.Listener {
    * Fires projectsChanged() in all listeners.
    */
   protected void fireProjectGroupChanged() {
-    Iterator i = _listeners.iterator();
-    while (i.hasNext()) {
-      ((ClientStateListener) i.next()).projectGroupChanged(_projectGroup);
+    for (final ClientStateListener listener : _listeners)
+    {
+      listener.projectGroupChanged(_projectGroup);
     }
   }
 
@@ -128,9 +126,9 @@ public class ClientState implements HourglassPreferences.Listener {
    * Fires newTimeSpanStarted() in all listeners.
    */
   protected void fireNewTimeSpanStarted(Date d) {
-    Iterator i = _listeners.iterator();
-    while (i.hasNext()) {
-      ((ClientStateListener) i.next()).newTimeSpanStarted(d);
+    for (final ClientStateListener listener : _listeners)
+    {
+      listener.newTimeSpanStarted(d);
     }
   }
 
@@ -139,9 +137,9 @@ public class ClientState implements HourglassPreferences.Listener {
    * Fires currentTimeSpanStopped() in all listeners.
    */
   protected void fireCurrentTimeSpanStopped(TimeSpan current) {
-    Iterator i = _listeners.iterator();
-    while (i.hasNext()) {
-      ((ClientStateListener) i.next()).currentTimeSpanStopped(current);
+    for (final ClientStateListener listener : _listeners)
+    {
+      listener.currentTimeSpanStopped(current);
     }
   }
   
@@ -149,9 +147,9 @@ public class ClientState implements HourglassPreferences.Listener {
    * Fires currentTimeSpanStopped() in all listeners.
    */
   protected void fireCurrentTimeSpanAborted() {
-    Iterator i = _listeners.iterator();
-    while (i.hasNext()) {
-      ((ClientStateListener) i.next()).currentTimeSpanAborted();
+    for (final ClientStateListener listener : _listeners)
+    {
+      listener.currentTimeSpanAborted();
     }
   }
 
@@ -161,9 +159,9 @@ public class ClientState implements HourglassPreferences.Listener {
    * @param selectedProject the new active project.
    */
   protected void fireSelectedProjectChanged(Project selectedProject) {
-    Iterator i = _listeners.iterator();
-    while (i.hasNext()) {
-      ((ClientStateListener) i.next()).selectedProjectChanged(selectedProject);
+    for (final ClientStateListener listener : _listeners)
+    {
+      listener.selectedProjectChanged(selectedProject);
     }
   }
   
@@ -359,14 +357,11 @@ public class ClientState implements HourglassPreferences.Listener {
   	return m_openTimeSpanStart;
   }
 
+  @Deprecated(forRemoval = true)
   private
   Logger getLogger() {
-    if (_logger == null) {
-      _logger = LogManager.getLogger(getClass());
-    }
-    return _logger;
+    return log;
   }
-
 
   /**
    * Sets edit mode on or off.
@@ -466,16 +461,18 @@ public class ClientState implements HourglassPreferences.Listener {
 	  return HourglassPreferences.getInstance();
   }
 
+  private final Logger log = LogManager.getLogger(getClass());
+
+  private final List<ClientStateListener> _listeners = new ArrayList<>();
+  private final Timer _timer;
+
   private SummaryFrame _summaryFrame;
 
   private ProjectGroup _projectGroup;
-  private List _listeners;
   private ProjectFactory _projectFactory;
   private ProjectPersistenceManager _persistenceManager;
-  private Timer _timer;
   private Project m_selectedProject;
   private Project m_runningProject;
-  private Logger _logger;
 
   private boolean _isEditMode;
   private boolean m_persistAllChanges;
