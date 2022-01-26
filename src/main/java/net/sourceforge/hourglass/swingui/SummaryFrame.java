@@ -792,7 +792,7 @@ private JPanel getLeftPanel() {
   }
 
   /**
-   * Write the current project data to permemant storage.
+   * Write the current project data to permanent storage.
    */
   private void writeProjectData() throws SAXException, IOException {
     getLogger().debug("Saving project data");
