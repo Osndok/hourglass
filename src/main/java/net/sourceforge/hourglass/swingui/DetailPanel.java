@@ -86,10 +86,6 @@ public class DetailPanel extends JPanel implements ClientStateListener,
 
 		inner.add(new JSeparator(), c_sep.clone());
 
-		inner.add(getLabel(Strings.TOTAL_COLON), c_lbl.clone());
-		inner.add(getTimeLabel(TOTAL, THIS), c_mid.clone());
-		inner.add(getTimeLabel(TOTAL, ALL), c_end.clone());
-
 		inner.add(getLabel(Strings.TODAY_COLON), c_lbl.clone());
 		inner.add(getTimeLabel(TODAY, THIS), c_mid.clone());
 		inner.add(getTimeLabel(TODAY, ALL), c_end.clone());
@@ -105,6 +101,10 @@ public class DetailPanel extends JPanel implements ClientStateListener,
 		inner.add(getLabel(Strings.THIS_YEAR_COLON), c_lbl.clone());
 		inner.add(getTimeLabel(YEAR, THIS), c_mid.clone());
 		inner.add(getTimeLabel(YEAR, ALL), c_end.clone());
+
+		inner.add(getLabel(Strings.TOTAL_COLON), c_lbl.clone());
+		inner.add(getTimeLabel(TOTAL, THIS), c_mid.clone());
+		inner.add(getTimeLabel(TOTAL, ALL), c_end.clone());
 
 		add(inner, BorderLayout.CENTER);
 	}
