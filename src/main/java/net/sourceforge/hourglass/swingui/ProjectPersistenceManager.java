@@ -49,6 +49,7 @@ import org.xml.sax.SAXException;
 
 /**
  * This class handles the saving and loading of the project file.
+ * Data is usually stored in ~/.hourglass/data.xml
  *
  * @author Neil Thier
  * @author Mike Grant <mike@acm.jhu.edu>
@@ -85,7 +86,28 @@ public class ProjectPersistenceManager
    * Loads the persistent project data into the client state.
    */
   public ProjectGroup load() throws SAXException, IOException {
-    return loadProjects(getFile());
+    var file = getFile();
+
+    if (file.canRead() && file.length() > 0)
+    {
+      return loadProjects(file);
+    }
+
+    for (int i = 0; i<_backupsNumber; i++)
+    {
+      _logger.error("Unable to read: {}", file);
+      file = getBackupFile(file, i);
+
+      if (file.canRead() && file.length() > 0)
+      {
+        return loadProjects(file);
+      }
+    }
+
+    _logger.warn("No data file was readable");
+
+    // NB: This was the original behavior:
+    return loadProjects(file);
   }
 
 
@@ -121,13 +143,13 @@ public class ProjectPersistenceManager
    */
   public synchronized void save(ProjectGroup group)
     throws SAXException, IOException {
-    
-    backup(getFile());
+
+    var file = getFile();
 
     /*
      * Begin by writing the ProjectGroup to a temp file.
      */
-    File tmpFile = File.createTempFile("hourglass", "xml");
+    File tmpFile = createTempFile();
     writeProjectFile(tmpFile, group);
 
     /*
@@ -137,17 +159,20 @@ public class ProjectPersistenceManager
      */
     ProjectGroup written = loadProjects(tmpFile);
     ProjectGroup existing = group;
-    if (checkConsistency(written, existing)) {
-      File old = getFile();
-      if (old.exists()) {
-        old.delete();
-      }
-      move(tmpFile, old);
+    if (!checkConsistency(written, existing))
+    {
+      throw new ProjectWriteException("Consistency check failure");
     }
-    else {
-      throw new ProjectWriteException
-        ("Unable to properly write the project file to disk.");
-    }
+
+    moveAwayAsBackup(file);
+    move(tmpFile, file);
+  }
+
+  private
+  File createTempFile()
+  {
+    var uniqifier = Long.toString(System.nanoTime());
+    return new File(_file.getParent(), _file.getName()+"-"+uniqifier);
   }
 
 
@@ -198,8 +223,8 @@ public class ProjectPersistenceManager
   }
 
 
-  protected void backup(File file) throws IOException {
-	backup(file, 0);
+  protected void moveAwayAsBackup(File file) throws IOException {
+	moveAwayAsBackup(file, 0);
   }
 
   /**
@@ -207,21 +232,36 @@ public class ProjectPersistenceManager
    * 
    * @param file the backup file
    */
-  protected void backup(File file, int num) throws IOException {
-    File backup = getBackupFile(file, num);
+  protected void moveAwayAsBackup(File file, int num) throws IOException
+  {
+    if (!file.exists())
+    {
+      return;
+    }
 
-    // if it already exists, move it to a backup file or delete it
-    if (file.exists()) {
-      File tmp = new File(file.getAbsolutePath());
-      if ( num < _backupsNumber ) { // not enough backups created
-        // if the backup file already exists, delete it
-        if (backup.exists()) {
-	  backup(backup, num+1);
-        }
-        move(tmp, backup);
-      } else {
-        tmp.delete();
+    File backup = getBackupFile(file, num);
+    var absolute = file.getCanonicalFile();
+
+    if (num < _backupsNumber)
+    { // not enough backups created
+      // if the backup file already exists, delete it
+      if (backup.exists())
+      {
+        moveAwayAsBackup(backup, num + 1);
       }
+      move(absolute, backup);
+    }
+    else
+    {
+      if (!absolute.delete())
+      {
+        throw new IOException("Unable to delete: " + absolute);
+      }
+    }
+
+    if (file.exists())
+    {
+      throw new IOException("Should have been deleted: "+file);
     }
   }
 
@@ -281,8 +321,11 @@ public class ProjectPersistenceManager
   private void move(File source, File target) throws IOException {
     boolean renameSucceeded = source.renameTo(target);
     if (!renameSucceeded) {
+      /*
       gu().copy(source, target);
       source.delete();
+       */
+      throw new IOException(String.format("Unable to rename '%s' -> '%s", source, target));
     }
   }
 
@@ -321,10 +364,6 @@ public class ProjectPersistenceManager
 
   protected File getFile() {
     return _file;
-  }
-
-  private static Utilities gu() {
-	  return Utilities.getInstance();
   }
 
   private static HourglassPreferences gp() {
