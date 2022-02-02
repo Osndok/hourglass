@@ -311,18 +311,10 @@ public class ProjectPersistenceManager
     return _logger;
   }
 
-
-  /**
-   * Moves a file.  If renameTo() doesn't work, fails over to copy and
-   * delete.
-   */
-  private void move(File source, File target) throws IOException {
-    boolean renameSucceeded = source.renameTo(target);
-    if (!renameSucceeded) {
-      /*
-      gu().copy(source, target);
-      source.delete();
-       */
+  private void move(File source, File target) throws IOException
+  {
+    if (!source.renameTo(target))
+    {
       throw new IOException(String.format("Unable to rename '%s' -> '%s", source, target));
     }
   }
