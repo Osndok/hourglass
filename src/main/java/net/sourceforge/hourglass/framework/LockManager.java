@@ -28,7 +28,10 @@ package net.sourceforge.hourglass.framework;
 import java.io.File;
 import java.io.IOException;
 
+import net.sourceforge.hourglass.swingui.ClientState;
 import net.sourceforge.hourglass.swingui.Strings;
+
+import javax.swing.*;
 
 /**
  * Manages locks for the application.
@@ -66,8 +69,15 @@ public class LockManager {
     File lockfile = getLockFileFor(archiveName);
     try {
       if (!lockfile.createNewFile()) {
-        throw new HourglassException(Strings.ERROR_KEY_CANNOT_LOCK_ARCHIVE, 
-            new String[] { archiveName, lockfile.getAbsolutePath() }); 
+        var i = JOptionPane.showConfirmDialog(ClientState.getInstance().getSummaryFrame(), "Force lock?", "Unable to lock", JOptionPane.YES_NO_OPTION);
+
+        if (i!=0)
+        {
+          throw new HourglassException(
+                  Strings.ERROR_KEY_CANNOT_LOCK_ARCHIVE,
+                  new String[]{archiveName, lockfile.getAbsolutePath()}
+          );
+        }
       }
     }
     catch (IOException e) {
