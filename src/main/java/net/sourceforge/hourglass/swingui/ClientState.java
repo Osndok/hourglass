@@ -274,11 +274,11 @@ public class ClientState implements HourglassPreferences.Listener {
 			fireSelectedProjectChanged(getSelectedProject());
 		}
 		catch (SAXException e) {
-			// TODO
+          ExceptionHandler.showUser(e);
 			getLogger().error(e);
 		} 
 		catch (IOException e) {
-			// TODO Auto-generated catch block
+          ExceptionHandler.showUser(e);
 			getLogger().debug(e);
 		}
 		finally {

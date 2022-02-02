@@ -215,6 +215,7 @@ public class TimeSpanPlate extends JPanel {
         } catch (ParseException pex) {
         	getLogger().debug("At least one wrong Spinner value, Start '" + getStartSpinnerField().getText()
         			+ "' and Stop '" + getEndSpinnerField().getText() + "'");
+            ExceptionHandler.showUser(pex);
             abortEdits();
             return;
         }

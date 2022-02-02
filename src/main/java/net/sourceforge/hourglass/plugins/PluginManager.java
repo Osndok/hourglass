@@ -42,6 +42,7 @@ import javax.swing.event.ListDataListener;
 
 import net.sourceforge.hourglass.framework.HourglassException;
 import net.sourceforge.hourglass.framework.HourglassPreferences;
+import net.sourceforge.hourglass.swingui.ExceptionHandler;
 import net.sourceforge.hourglass.swingui.Utilities;
 import net.sourceforge.hourglass.swingui.Strings;
 
@@ -125,7 +126,7 @@ public class PluginManager implements ListModel {
     private void handleInstalledPluginLoadError(Preferences node,
 			String filename, Exception cause)
 			throws BackingStoreException {
-    	
+        ExceptionHandler.showUser(cause);
     	String name = node.get(PLUGIN_NAME, "(unknown)");
 		s_logger.error("Error loading plugin " + name + " at file "
 				+ filename, cause);

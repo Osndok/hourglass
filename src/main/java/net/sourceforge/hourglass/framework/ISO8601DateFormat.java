@@ -175,18 +175,16 @@ public class ISO8601DateFormat extends DateFormat {
     }
   }
 
-
+  @Deprecated
   private
-  Logger getLogger() {
-    if (_logger == null) {
-      _logger = LogManager.getLogger(getClass());
-    }
-    return _logger;
+  Logger getLogger()
+  {
+    return log;
   }
 
 
   private DateFormat _dateFormatDelegate;
-  private Logger _logger;
+  private final Logger log = LogManager.getLogger(getClass());
   private Calendar _calendar;
 
   private static final int MSECONDS_PER_MINUTE = 60000;

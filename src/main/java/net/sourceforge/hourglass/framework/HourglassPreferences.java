@@ -37,6 +37,7 @@ import java.util.Map;
 import java.util.prefs.Preferences;
 import java.util.Properties;
 
+import net.sourceforge.hourglass.swingui.ExceptionHandler;
 import net.sourceforge.hourglass.swingui.Strings;
 
 import org.apache.logging.log4j.LogManager;
@@ -65,7 +66,8 @@ public class HourglassPreferences {
             _props.load(propURL.openStream());
         }
     } catch (java.io.IOException e) {
-	getLogger().error("Preferences couldn't be loaded from '{}'", PREFERENCES_RESOURCE, e);
+	    log.error("Preferences couldn't be loaded from '{}'", PREFERENCES_RESOURCE, e);
+        ExceptionHandler.showUser(e);
     }
   }
 
@@ -293,23 +295,10 @@ public class HourglassPreferences {
     return __instance;
   }
 
+  @Deprecated
   private
   Logger getLogger() {
-    if (_logger == null) {
-      _logger = LogManager.getLogger(getClass());
-    }
-    return _logger;
-  }
-  
-
-  /**
-   * Sets up the given HourglassPreferences.Listener to receive preference
-   * change events for the specified preference IDs.
-   */
-  public void addListener(Listener listener, String[] preferenceIds) {
-    for (int i = 0; i < preferenceIds.length; ++i) {
-      addListener(listener, preferenceIds[ i ]);
-    }
+    return log;
   }
 
   public void addListener(Listener listener, String preferenceId) {
@@ -348,7 +337,7 @@ public class HourglassPreferences {
   }
 
   private Preferences _prefs;
-  private Logger _logger;
+  private final Logger log = LogManager.getLogger(getClass());
   private Map _listeners;
   private Properties _props;
   

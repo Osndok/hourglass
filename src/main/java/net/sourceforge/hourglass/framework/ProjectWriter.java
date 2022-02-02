@@ -28,7 +28,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -36,6 +36,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.Properties;
 
+import net.sourceforge.hourglass.swingui.ExceptionHandler;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdom.output.XMLOutputter;
@@ -52,22 +53,19 @@ public class ProjectWriter {
    * Creates a ProjectWriter on the given output stream.
    */
   public ProjectWriter(OutputStream os) {
-    try {
-    	_writer = new PrintWriter(new OutputStreamWriter(os, "UTF-8"), NO_AUTOFLUSH);
-	} catch (UnsupportedEncodingException e1) {
-		getLogger().error("Couldn't create UTF-8 output writer.", e1);
-		_writer = new PrintWriter(os, NO_AUTOFLUSH);
-	}
+    _writer = new PrintWriter(new OutputStreamWriter(os, StandardCharsets.UTF_8), NO_AUTOFLUSH);
     _dateFormat = Utilities.getInstance().createDateFormat();
     _xmlOutputter = new XMLOutputter();
     try {
       initializeProperties();
     }
     catch (ParseException e) {
-      getLogger().error("Parse exception initializing properties.", e);
+      log.error("Parse exception initializing properties.", e);
+      ExceptionHandler.showUser(e);
     }
     catch (IOException e) {
-      getLogger().error("IOException initializing properties.", e);
+      log.error("IOException initializing properties.", e);
+      ExceptionHandler.showUser(e);
     }
     writeHeader(_writer);
   }
@@ -212,17 +210,15 @@ public class ProjectWriter {
       writer.println("\" />");
   }
 
-
+  @Deprecated
   private
-  Logger getLogger() {
-    if (_logger == null) {
-      _logger = LogManager.getLogger(getClass());
-    }
-    return _logger;
+  Logger getLogger()
+  {
+    return log;
   }
 
 
-  private Logger _logger;
+  private final Logger log = LogManager.getLogger(getClass());
   private PrintWriter _writer;
   private DateFormat _dateFormat;
   private XMLOutputter _xmlOutputter;

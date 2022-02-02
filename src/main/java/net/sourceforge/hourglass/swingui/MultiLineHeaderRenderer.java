@@ -47,6 +47,7 @@ public class MultiLineHeaderRenderer extends JList implements TableCellRenderer 
         }
         catch (IOException ex) {
             ex.printStackTrace();
+            ExceptionHandler.showUser(ex);
         }
         setListData(v);
         return this;

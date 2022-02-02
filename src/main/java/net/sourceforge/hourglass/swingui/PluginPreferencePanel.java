@@ -117,8 +117,8 @@ public class PluginPreferencePanel
                             PluginManager.getInstance().removePlugin(plugin);
                         }
                         catch (BackingStoreException e) {
-                            // TODO [MGT, 01 May 2004]: Show error.
                             e.printStackTrace();
+                            ExceptionHandler.showUser(e);
                         }
                     }
                 }
@@ -137,8 +137,8 @@ public class PluginPreferencePanel
                             PluginManager.getInstance().addPlugin(file);
                         }
                         catch (Exception e) {
-                            // TODO [MGT, 21 Apr 2004]: Show error
                             e.printStackTrace();
+                            ExceptionHandler.showUser(e);
                         }
                     }
                 }

@@ -315,6 +315,7 @@ public class TimecardReportPanel extends JPanel {
                         }
                     }
                     catch (ParseException e) {
+                        // ? ExceptionHandler.showUser(e);
                         JOptionPane.showMessageDialog(TimecardReportPanel.this,
                                 gu().getString(Strings.ERROR_KEY_PARSING_DATE,
 					new String[] {gu().getString(

@@ -117,6 +117,7 @@ public class Timer extends Thread {
       }
       catch (InterruptedException e) {
         getLogger().debug("Timer interrupted.");
+        // swing is shutting down, DO NOT open a window to present this exception to the user
       }
     }
   }

@@ -343,6 +343,7 @@ public class ProjectPersistenceManager
         }
         catch (Exception e) {
           getLogger().error("Could not autosave", e);
+          ExceptionHandler.showUser(e);
         }
         _minutesRemainingUntilAutosave = _autosaveInterval;
       }

@@ -183,6 +183,7 @@ public class Utilities extends BaseUtilities {
 	}
 
 	public void showError(Component parent, IHourglassException e) {
+		// ? ExceptionHandler.showUser(e);
 		showError(parent, e.getKey(), e.getArgs());
 	}
 

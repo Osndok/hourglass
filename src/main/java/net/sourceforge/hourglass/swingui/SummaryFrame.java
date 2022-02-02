@@ -144,8 +144,10 @@ public class SummaryFrame
       loadProjectData();
     } catch (SAXException se) {
       getLogger().fatal("Project XML file is corrupt. " + se.getMessage());
+        ExceptionHandler.showUser(se);
     } catch (IOException ioe) {
       getLogger().fatal("Error opening Project XML file. " + ioe.getMessage());
+        ExceptionHandler.showUser(ioe);
     }
   }
 
@@ -291,10 +293,12 @@ public class SummaryFrame
 	  } 
 	  catch (IOException ioe) {
 		  getLogger().fatal(ioe.getMessage());
+          ExceptionHandler.showUser(ioe);
 		  return false;
 	  } 
 	  catch (SAXException saxe) {
 		  getLogger().fatal(saxe.getMessage());
+          ExceptionHandler.showUser(saxe);
 		  return false;
 	  }
   }
@@ -465,12 +469,12 @@ private JPanel getLeftPanel() {
             writeProjectData();
           }
           catch (SAXException e) {
-            // TODO Auto-generated catch block
             getLogger().error(e);
+              ExceptionHandler.showUser(e);
           }
           catch (IOException e) {
-            // TODO Auto-generated catch block
             getLogger().error(e);
+              ExceptionHandler.showUser(e);
           }
         }
       };
@@ -660,6 +664,7 @@ private JPanel getLeftPanel() {
        */
       getLogger().error("Interrupted while creating new project.");
       getLogger().error("Creating project in current thread.");
+        ExceptionHandler.showUser(ie);
       _newProject = getClientState().getProjectFactory().createProject(getClientState().getProjectGroup());
     }
 
@@ -739,6 +744,7 @@ private JPanel getLeftPanel() {
           getClientState().setSelectedProject(p);
         }
         catch (IllegalParentException ipex) {
+            // ? ExceptionHandler.showUser(ipex);
           JOptionPane.showMessageDialog
             (this, gu().getString(Strings.ERROR_KEY_ILLEGAL_PARENT),
              gu().getString(Strings.ERROR), JOptionPane.ERROR_MESSAGE);
@@ -787,7 +793,8 @@ private JPanel getLeftPanel() {
     try {
       getClientState().setProjectGroup(getPersistenceManager().load());
     } catch (FileNotFoundException fnfe) {
-      // nothing to load
+      // nothing to load... probably okay.
+        ExceptionHandler.showUser(fnfe);
     }
   }
 
