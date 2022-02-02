@@ -251,17 +251,15 @@ public class ProjectPersistenceManager
       }
       move(absolute, backup);
     }
-    else
+    else if (!absolute.delete())
     {
-      if (!absolute.delete())
-      {
-        throw new IOException("Unable to delete: " + absolute);
-      }
+      throw new IOException("Unable to delete: " + absolute);
     }
+
 
     if (file.exists())
     {
-      throw new IOException("Should have been deleted: "+file);
+      throw new IOException("Should have been deleted: " + file);
     }
   }
 
