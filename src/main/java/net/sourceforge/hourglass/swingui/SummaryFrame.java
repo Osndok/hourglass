@@ -71,8 +71,6 @@ import javax.swing.SwingConstants;
 import javax.swing.ToolTipManager;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
-import javax.swing.event.TreeSelectionEvent;
-import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
@@ -100,8 +98,8 @@ public class SummaryFrame
   implements 
     ClientStateListener,
     TimerListener,
-    SwingConstants,
-    TreeSelectionListener {
+    SwingConstants
+{
 
 	private static final long serialVersionUID = 1L;
 
@@ -115,7 +113,9 @@ public class SummaryFrame
 		initializeData();
 		getClientState().getTimer().addTimerListener(this);
 		getClientState().addClientStateListener(this);
-		getProjectTree().addTreeSelectionListener(this);
+        var listener = new ProjectSelectionListener();
+		getProjectTree().addTreeSelectionListener(listener);
+        getProjectTree().addMouseListener(listener);
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 	}
 
@@ -690,7 +690,7 @@ private JPanel getLeftPanel() {
   }
 
 
-  private Project getSelectedProject() {
+  Project getSelectedProject() {
     TreePath selectionPath = getProjectTree().getSelectionPath();
     if (selectionPath == null) {
       return null;
@@ -921,15 +921,6 @@ private JPanel getLeftPanel() {
     }
     return _popup;
   }
-
-
-  /**
-   * Reacts to selection changes in the project list.
-   */
-  public void valueChanged(TreeSelectionEvent e) {
-    getClientState().setSelectedProject(getSelectedProject());
-  }
-
 
   /**
    * Reacts to the current active project changing.
