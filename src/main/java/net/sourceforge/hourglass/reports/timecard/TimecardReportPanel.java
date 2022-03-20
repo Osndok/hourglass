@@ -89,6 +89,8 @@ public class TimecardReportPanel extends JPanel {
 		}
 	};
 
+    private static final boolean DECIMAL_BY_DEFAULT = true;
+
     /**
      * Creates a new timecard report
      * 
@@ -128,9 +130,12 @@ public class TimecardReportPanel extends JPanel {
         Date startDate = DateUtilities.getCurrentWeekStart();
         Date endDate = DateUtilities.getCurrentWeekEnd();
 
+        var formatter = DECIMAL_BY_DEFAULT ?
+                DateUtilities.DECIMAL_HOUR_FORMATTER :
+                DateUtilities.HOUR_MINUTE_FORMATTER;
+
         JPanel contentPanel = new JPanel(new BorderLayout());
-        JComponent treeComponent = createTreeComponent(projectGroup, startDate, endDate,
-                DateUtilities.HOUR_MINUTE_FORMATTER);
+        JComponent treeComponent = createTreeComponent(projectGroup, startDate, endDate, formatter);
         contentPanel.add(treeComponent, BorderLayout.CENTER);
         contentPanel.add(createHeader(), BorderLayout.NORTH);
         contentPanel.add(createOptionPanel(startDate, endDate), BorderLayout.SOUTH);
@@ -179,7 +184,7 @@ public class TimecardReportPanel extends JPanel {
         _buttonGroup.add(hhMmFormat);
         _buttonGroup.add(decimalFormat);
 
-        if (true)
+        if (DECIMAL_BY_DEFAULT)
         {
             _buttonGroup.setSelected(decimalFormat.getModel(), true);
         }
