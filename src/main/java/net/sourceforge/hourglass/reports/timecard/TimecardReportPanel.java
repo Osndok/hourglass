@@ -178,7 +178,15 @@ public class TimecardReportPanel extends JPanel {
         _buttonGroup = new ButtonGroup();
         _buttonGroup.add(hhMmFormat);
         _buttonGroup.add(decimalFormat);
-        _buttonGroup.setSelected(hhMmFormat.getModel(), true);
+
+        if (true)
+        {
+            _buttonGroup.setSelected(decimalFormat.getModel(), true);
+        }
+        else
+        {
+            _buttonGroup.setSelected(hhMmFormat.getModel(), true);
+        }
 
         _startDateField = new JTextField(10);
         _endDateField = new JTextField(10);
