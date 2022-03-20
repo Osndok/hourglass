@@ -71,11 +71,15 @@ public class LocalProject implements MutableProject {
      * Adds the given time span to the project.
      */
     public void addTimeSpan(TimeSpan ts) {
-        /*
+        /**
+         * NB: checkForOvelap throws, which means we don't add the timespan, which means we lose data if they are editing.
          * TODO: turn off checking when we're initializing from persisted form.
          * It's a big performance hit (n^2 checks).
          */
-        checkForOverlap(ts);
+        if (false)
+        {
+            checkForOverlap(ts);
+        }
         _timespans.add(ts);
     }
 
@@ -93,6 +97,7 @@ public class LocalProject implements MutableProject {
      * @param timeSpan
      *          the timeSpan with which to check for overlap.
      */
+    @Deprecated
     public void checkForOverlap(TimeSpan timeSpan) {
         for (final TimeSpan curr : _timespans)
         {

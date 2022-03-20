@@ -32,6 +32,7 @@ import net.sourceforge.hourglass.swingui.Strings;
  *
  * @author Mike Grant <mike@acm.jhu.edu> 
  */
+@Deprecated
 public class TimeSpanOverlapException extends HourglassRuntimeException {
 
 
@@ -41,6 +42,7 @@ public class TimeSpanOverlapException extends HourglassRuntimeException {
    *
    * @param timeSpan the <code>TimeSpan</code> that caused the violation
    */
+  @Deprecated
   public TimeSpanOverlapException(TimeSpan timeSpan, Project project) {
   	super(timeSpan + "overlaps another TimeSpan.", null, Strings.ERROR_KEY_TIME_SPAN_OVERLAP, null);
     _timeSpan = timeSpan;
