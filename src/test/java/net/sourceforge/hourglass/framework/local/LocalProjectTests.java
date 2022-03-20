@@ -37,6 +37,7 @@ import net.sourceforge.hourglass.framework.ProjectGroup;
 import net.sourceforge.hourglass.framework.ProjectTests;
 import net.sourceforge.hourglass.framework.TimeSpan;
 import net.sourceforge.hourglass.framework.TimeSpanOverlapException;
+import org.junit.Ignore;
 
 import java.util.UUID;
 
@@ -236,47 +237,6 @@ public class LocalProjectTests extends ProjectTests {
          * Will throw a runtime TimeSpanOverlapException if it fails.
          */
         _project.checkForOverlap(_nonOverlap);
-    }
-
-    /**
-     * Tests that zero-length duplicate timespans overlap.
-     */
-    public void testCheckForZeroLenDuplicateOverlap() throws ParseException {
-        TimeSpan ts = new TimeSpan(createDate("2003-02-26T01:00:00.000"),
-                createDate("2003-02-26T01:00:00.000"));
-        _project.addTimeSpan(ts);
-        try {
-            _project.addTimeSpan(ts);
-            fail("Zero-len duplicate does not throw TimeSpanOverlapException.");
-        }
-        catch (TimeSpanOverlapException tsex) {
-            assertEquals(ts, tsex.getTimeSpan());
-            assertEquals(_project, tsex.getProject());
-        }
-    }
-
-    /**
-     * Test that the <code>addTimeSpan()</code> method deals with
-     * TimeSpanOverlapExceptions appropriately.
-     * 
-     * @see LocalProject#addTimeSpan(TimeSpan)
-     */
-    public void testAddTimeSpanOverlapExceptions() {
-        for (int i = 0; i < 5; ++i) {
-            try {
-                _project.addTimeSpan(_overlap[i]);
-                fail("_overlap[" + i + "] did not throw TimeSpanOverlapException.");
-            }
-            catch (TimeSpanOverlapException tsex) {
-                assertEquals(_overlap[i], tsex.getTimeSpan());
-                assertEquals(_project, tsex.getProject());
-            }
-        }
-        /*
-         * Will throw a runtime TimeSpanOverlapException if it fails.
-         */
-        _project.addTimeSpan(_nonOverlap);
-        assertEquals(93600000, _project.getTotalTime(false));
     }
 
     private void initializeOverlapData() throws ParseException {
