@@ -242,10 +242,10 @@ public class DetailPanel extends JPanel implements ClientStateListener,
 	 * Adds the time from the open timespan to its argument.
 	 */
 	private long getTimePlusCurrent(long ms) {
-		if (ClientState.getInstance().isRunningProjectSelected()) {
+		ClientState cs = ClientState.getInstance();
+		if (cs.isRunning() && cs.isRunningProjectSelected()) {
 			long now = System.currentTimeMillis();
-			long elapsed = now
-					- ClientState.getInstance().getOpenTimeSpanStartMillis();
+			long elapsed = now - cs.getOpenTimeSpanStartMillis();
 			return ms + elapsed;
 		} else {
 			return ms;
